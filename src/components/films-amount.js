@@ -1,5 +1,5 @@
-export const createFilmsAmountTemplate = () => {
+export const createFilmsAmountTemplate = (filmsAmount) => {
   return (
-    `<p>130 291 movies inside</p>`
+    `<p>${filmsAmount.toLocaleString(`ru-RU`)} movies inside</p>`
   );
 };

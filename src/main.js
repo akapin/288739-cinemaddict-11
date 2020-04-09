@@ -23,9 +23,10 @@ const siteMainElement = document.querySelector(`.main`);
 const footerStatisticsElement = document.querySelector(`.footer__statistics`);
 
 const films = generateFilms(FILM_COUNT);
-const watchedMoviesCount = getRandomIntegerNumber(0, 30);
+const watchedFilmsCount = getRandomIntegerNumber(0, 30);
+const filmsAmount = getRandomIntegerNumber(100000, 200001);
 
-render(siteHeaderElement, createProfileTemplate(watchedMoviesCount));
+render(siteHeaderElement, createProfileTemplate(watchedFilmsCount));
 render(siteMainElement, createMainNavigationTemplate());
 render(siteMainElement, createSortingTemplate());
 render(siteMainElement, createBoardTemplate());
@@ -49,7 +50,7 @@ for (let i = 0; i < filmsListExtraContainers.length; i++) {
   }
 }
 
-render(footerStatisticsElement, createFilmsAmountTemplate());
+render(footerStatisticsElement, createFilmsAmountTemplate(filmsAmount));
 
 const showMoreButton = filmsListElement.querySelector(`.films-list__show-more`);
 
