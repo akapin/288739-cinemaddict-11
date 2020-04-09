@@ -99,7 +99,7 @@ export const createFilmDetailsTemplate = (film) => {
                 <td class="film-details__cell">${country}</td>
               </tr>
               <tr class="film-details__row">
-                <td class="film-details__term">Genres</td>
+                <td class="film-details__term">Genre${genres.length > 1 ? `s` : ``}</td>
                 <td class="film-details__cell">
                   ${genresMarkup}
               </tr>

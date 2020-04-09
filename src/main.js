@@ -1,3 +1,4 @@
+import {getRandomIntegerNumber} from "./utils.js";
 import {createProfileTemplate} from "./components/profile.js";
 import {createMainNavigationTemplate} from "./components/main-navigation.js";
 import {createSortingTemplate} from "./components/sorting";
@@ -22,8 +23,9 @@ const siteMainElement = document.querySelector(`.main`);
 const footerStatisticsElement = document.querySelector(`.footer__statistics`);
 
 const films = generateFilms(FILM_COUNT);
+const watchedMoviesCount = getRandomIntegerNumber(0, 30);
 
-render(siteHeaderElement, createProfileTemplate());
+render(siteHeaderElement, createProfileTemplate(watchedMoviesCount));
 render(siteMainElement, createMainNavigationTemplate());
 render(siteMainElement, createSortingTemplate());
 render(siteMainElement, createBoardTemplate());
