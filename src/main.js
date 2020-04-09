@@ -3,6 +3,7 @@ import {createMainNavigationTemplate} from "./components/main-navigation.js";
 import {createSortingTemplate} from "./components/sorting";
 import {createBoardTemplate} from "./components/board.js";
 import {createFilmTemplate} from "./components/film.js";
+import {createFilmDetailsTemplate} from "./components/film-details.js";
 import {createShowMoreButtonTemplate} from "./components/show-more-button.js";
 import {createFilmsAmountTemplate} from "./components/films-amount.js";
 import {generateFilms} from "./mock/film.js";
@@ -28,6 +29,8 @@ render(siteMainElement, createBoardTemplate());
 const filmsListElement = siteMainElement.querySelector(`.films-list`);
 const filmsListContainerElement = filmsListElement.querySelector(`.films-list__container`);
 const filmsListExtraContainers = siteMainElement.querySelectorAll(`.films-list--extra .films-list__container`);
+
+render(filmsListContainerElement, createFilmDetailsTemplate(films[0]));
 
 for (let i = 0; i < FILM_COUNT; i++) {
   render(filmsListContainerElement, createFilmTemplate(films[i]));

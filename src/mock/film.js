@@ -1,4 +1,4 @@
-import {getRandomIntegerNumber, getRandomArrayItem, getRandomDate} from "../utils.js";
+import {getRandomIntegerNumber, getRandomFloatNumber, getRandomArrayItem, getRandomDate} from "../utils.js";
 import {generateComments} from "./comment.js";
 
 const TEXT = `Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -71,6 +71,26 @@ const DIRECTORS = [
   `Quentin Tarantino`,
 ];
 
+const SCREENWRITERS = [
+  `Billy Wilder`,
+  `Ethan Coen`,
+  `Robert Towne`,
+  `Quentin Tarantino`,
+  `William Goldman`,
+  `Charlie Kaufman`,
+  `Woody Allen`,
+];
+
+const ACTORS = [
+  `Morgan Freeman`,
+  `Leonardo DiCaprio`,
+  `Robert De Niro`,
+  `Brad Pitt`,
+  `Michael Caine`,
+  `Matt Damon`,
+  `Tom Hanks`,
+];
+
 const generateFilmDescription = () => {
   const descriptionSentences = TEXT.split(`.`);
   let newDescriptionList = new Set();
@@ -88,28 +108,34 @@ const generateFilmDuration = () => {
   return `${hours}h ${minutes}m`;
 };
 
-const generateGenreList = () => {
-  let genreList = new Set();
-  const genreListSize = getRandomIntegerNumber(1, 4);
-  for (let i = 1; i <= genreListSize; i++) {
-    genreList.add(getRandomArrayItem(GENRES));
+const generateRandomList = (array, maxSize) => {
+  let newList = new Set();
+  const newListSize = getRandomIntegerNumber(1, maxSize + 1);
+  for (let i = 1; i <= newListSize; i++) {
+    newList.add(getRandomArrayItem(array));
   }
-  return Array.from(genreList);
+  return Array.from(newList);
 };
+
+const generateGenresList = () => generateRandomList(GENRES, 3);
+
+const generateActorsList = () => generateRandomList(ACTORS, 3);
+
+const generateScreenwritersList = () => generateRandomList(SCREENWRITERS, 3);
 
 const generateFilm = () => {
   return {
     poster: getRandomArrayItem(POSTERS),
     title: getRandomArrayItem(TITLES),
     originTitle: getRandomArrayItem(TITLES),
-    rating: getRandomIntegerNumber(0, 11),
+    rating: getRandomFloatNumber(0.0, 11.0),
     date: getRandomDate(),
     duration: generateFilmDuration(),
-    genres: generateGenreList(),
+    genres: generateGenresList(),
     country: getRandomArrayItem(COUNTRIES),
     director: getRandomArrayItem(DIRECTORS),
-    screenwriters: [],
-    actors: [],
+    screenwriters: generateScreenwritersList(),
+    actors: generateActorsList(),
     ageRating: getRandomArrayItem(AGE_RATINGS),
     description: generateFilmDescription(),
     comments: generateComments(getRandomIntegerNumber(0, 6)),
