@@ -128,7 +128,7 @@ const generateFilm = () => {
     poster: getRandomArrayItem(POSTERS),
     title: getRandomArrayItem(TITLES),
     originTitle: getRandomArrayItem(TITLES),
-    rating: getRandomFloatNumber(0.0, 11.0),
+    rating: getRandomFloatNumber(0.0, 10.0),
     date: getRandomDate(),
     duration: generateFilmDuration(),
     genres: generateGenresList(),
