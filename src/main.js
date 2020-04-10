@@ -1,4 +1,3 @@
-import {getRandomIntegerNumber} from "./utils.js";
 import {createProfileTemplate} from "./components/profile.js";
 import {createMainNavigationTemplate} from "./components/main-navigation.js";
 import {createSortingTemplate} from "./components/sorting";
@@ -8,7 +7,7 @@ import {createFilmTemplate} from "./components/film.js";
 import {createFilmDetailsTemplate} from "./components/film-details.js";
 import {createShowMoreButtonTemplate} from "./components/show-more-button.js";
 import {createFilmsAmountTemplate} from "./components/films-amount.js";
-import {generateFilms} from "./mock/film.js";
+import {generateFilms, generateWatchedFilmsCount, generateFilmsAmount} from "./mock/film.js";
 import {generateFilters} from "./mock/filter.js";
 
 const FILM_COUNT = 15;
@@ -27,8 +26,8 @@ const footerStatisticsElement = document.querySelector(`.footer__statistics`);
 
 const films = generateFilms(FILM_COUNT);
 const filters = generateFilters();
-const watchedFilmsCount = getRandomIntegerNumber(0, 30);
-const filmsAmount = getRandomIntegerNumber(100000, 200001);
+const watchedFilmsCount = generateWatchedFilmsCount();
+const filmsAmount = generateFilmsAmount();
 
 render(siteHeaderElement, createProfileTemplate(watchedFilmsCount));
 render(siteMainElement, createMainNavigationTemplate(filters));

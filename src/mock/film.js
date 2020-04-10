@@ -1,6 +1,16 @@
 import {getRandomIntegerNumber, getRandomFloatNumber, getRandomArrayItem, getRandomDate} from "../utils.js";
 import {generateComments} from "./comment.js";
 
+const WatchedFilmsCount = {
+  MIN: 0,
+  MAX: 30,
+};
+
+const FilmsAmount = {
+  MIN: 100000,
+  MAX: 200000,
+};
+
 const TEXT = `Lorem ipsum dolor sit amet, consectetur adipiscing elit.
   Cras aliquet varius magna, non porta ligula feugiat eget.
   Fusce tristique felis at fermentum pharetra.
@@ -151,5 +161,7 @@ const generateFilms = (count) => {
     .map(generateFilm);
 };
 
+const generateWatchedFilmsCount = () => getRandomIntegerNumber(WatchedFilmsCount.MIN, WatchedFilmsCount.MAX + 1);
+const generateFilmsAmount = () => getRandomIntegerNumber(FilmsAmount.MIN, FilmsAmount.MAX + 1);
 
-export {generateFilms};
+export {generateFilms, generateWatchedFilmsCount, generateFilmsAmount};
