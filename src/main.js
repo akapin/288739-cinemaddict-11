@@ -9,16 +9,13 @@ import {createShowMoreButtonTemplate} from "./components/show-more-button.js";
 import {createFilmsAmountTemplate} from "./components/films-amount.js";
 import {generateFilms, generateWatchedFilmsCount, generateFilmsAmount} from "./mock/film.js";
 import {generateFilters} from "./mock/filter.js";
+import {render, RenderPosition} from "./utils.js";
 
 const FILM_COUNT = 15;
 const SHOWING_FILMS_COUNT_ON_START = 5;
 const SHOWING_FILMS_COUNT_BY_BUTTON = 5;
 const SHOWING_TOP_RATED_FILMS_COUNT = 2;
 const SHOWING_MOST_COMMENTED_FILMS_COUNT = 2;
-
-const render = (container, template, place = `beforeend`) => {
-  container.insertAdjacentHTML(place, template);
-};
 
 const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
