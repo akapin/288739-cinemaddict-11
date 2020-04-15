@@ -1,4 +1,4 @@
-import {castTimeFormat} from "../utils.js";
+import {castTimeFormat, createElement} from "../utils.js";
 import {MONTH_NAMES} from "../const.js";
 
 const createGenresMarkup = (genres) => {
@@ -35,7 +35,7 @@ const createCommentsMarkup = (comments) => {
     .join(`\n`);
 };
 
-export const createFilmDetailsTemplate = (film) => {
+const createFilmDetailsTemplate = (film) => {
   const {
     poster, title, originTitle, rating, date, duration, genres, country,
     director, screenwriters, actors, ageRating, description, comments,
@@ -163,3 +163,27 @@ export const createFilmDetailsTemplate = (film) => {
     </form>`
   );
 };
+
+export default class FilmDetails {
+  constructor(film) {
+    this._film = film;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilmDetailsTemplate(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
