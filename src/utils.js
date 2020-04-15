@@ -46,5 +46,8 @@ export const render = (container, element, place = RenderPosition.BEFOREEND) => 
     case RenderPosition.BEFOREEND:
       container.append(element);
       break;
+    default:
+      container.append(element);
+      break;
   }
 };
