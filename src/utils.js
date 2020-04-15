@@ -25,3 +25,10 @@ export const getRandomDate = () => {
 export const castTimeFormat = (value) => {
   return value < 10 ? `0${value}` : String(value);
 };
+
+export const createElement = (template) => {
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = template;
+
+  return newElement.firstChild;
+};
