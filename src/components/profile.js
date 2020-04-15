@@ -1,3 +1,5 @@
+import {createElement} from "../utils.js";
+
 const getUserRank = (watchedFilmsCount) => {
   if (watchedFilmsCount >= 1 && watchedFilmsCount <= 10) {
     return `Novice`;
@@ -9,7 +11,7 @@ const getUserRank = (watchedFilmsCount) => {
   return ``;
 };
 
-export const createProfileTemplate = (watchedFilmsCount) => {
+const createProfileTemplate = (watchedFilmsCount) => {
   const userRank = getUserRank(watchedFilmsCount);
   return (
     `<section class="header__profile profile">
@@ -18,3 +20,27 @@ export const createProfileTemplate = (watchedFilmsCount) => {
     </section>`
   );
 };
+
+export default class Profile {
+  constructor(watchedFilmsCount) {
+    this._watchedFilmsCount = watchedFilmsCount;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createProfileTemplate(this._watchedFilmsCount);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
