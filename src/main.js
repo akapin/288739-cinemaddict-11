@@ -19,24 +19,40 @@ const SHOWING_TOP_RATED_FILMS_COUNT = 2;
 const SHOWING_MOST_COMMENTED_FILMS_COUNT = 2;
 
 const renderFilm = (containerElement, film) => {
-  const onFilmTitleClick = () => {
+  const openFilmDetailsPopup = () => {
     bodyElement.classList.add(`hide-overflow`);
     bodyElement.appendChild(filmDetailsElement);
+    document.addEventListener(`keydown`, onEscKeyDown);
+  };
+
+  const closeFilmDetailsPopup = () => {
+    bodyElement.classList.remove(`hide-overflow`);
+    bodyElement.removeChild(filmDetailsElement);
+    document.removeEventListener(`keydown`, onEscKeyDown);
+  };
+
+  const onEscKeyDown = (evt) => {
+    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+
+    if (isEscKey) {
+      closeFilmDetailsPopup();
+    }
+  };
+
+  const onFilmTitleClick = () => {
+    openFilmDetailsPopup();
   };
 
   const onFilmPosterClick = () => {
-    bodyElement.classList.add(`hide-overflow`);
-    bodyElement.appendChild(filmDetailsElement);
+    openFilmDetailsPopup();
   };
 
   const onFilmCommentsClick = () => {
-    bodyElement.classList.add(`hide-overflow`);
-    bodyElement.appendChild(filmDetailsElement);
+    openFilmDetailsPopup();
   };
 
   const onFilmDetailsCloseButtonClick = () => {
-    bodyElement.classList.remove(`hide-overflow`);
-    bodyElement.removeChild(filmDetailsElement);
+    closeFilmDetailsPopup();
   };
 
   const bodyElement = document.querySelector(`body`);
