@@ -8,6 +8,7 @@ import FilmComponent from "./components/film.js";
 import FilmDetailsComponent from "./components/film-details.js";
 import ShowMoreButtonComponent from "./components/show-more-button.js";
 import FilmsAmountComponent from "./components/films-amount.js";
+import NoFilmsComponent from "./components/no-films.js";
 import {generateFilms, generateWatchedFilmsCount, generateFilmsAmount} from "./mock/film.js";
 import {generateFilters} from "./mock/filter.js";
 import {render} from "./utils.js";
@@ -109,6 +110,11 @@ const renderExtraFilmsList = (containerElement, title, films, showingFilmsCount)
 };
 
 const renderBoard = (containerElement, films) => {
+  if (films.length === 0) {
+    render(containerElement, new NoFilmsComponent().getElement());
+    return;
+  }
+
   const boardElement = new BoardComponent().getElement();
   const filmsSortedByRating = films.slice().sort((a, b) => b.rating - a.rating);
   const filmsSortedByComments = films.slice().sort((a, b) => b.comments.length - a.comments.length);
