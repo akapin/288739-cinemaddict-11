@@ -22,13 +22,13 @@ const SHOWING_MOST_COMMENTED_FILMS_COUNT = 2;
 const renderFilm = (containerElement, film) => {
   const openFilmDetailsPopup = () => {
     bodyElement.classList.add(`hide-overflow`);
-    append(bodyElement, filmDetailsElement);
+    append(bodyElement, filmDetailsComponent);
     document.addEventListener(`keydown`, onEscKeyDown);
   };
 
   const closeFilmDetailsPopup = () => {
     bodyElement.classList.remove(`hide-overflow`);
-    remove(bodyElement, filmDetailsElement);
+    remove(filmDetailsComponent);
     document.removeEventListener(`keydown`, onEscKeyDown);
   };
 
@@ -67,7 +67,8 @@ const renderFilm = (containerElement, film) => {
   filmPoster.addEventListener(`click`, onFilmPosterClick);
   filmComments.addEventListener(`click`, onFilmCommentsClick);
 
-  const filmDetailsElement = new FilmDetailsComponent(film).getElement();
+  const filmDetailsComponent = new FilmDetailsComponent(film);
+  const filmDetailsElement = filmDetailsComponent.getElement();
   const filmDetailsCloseButton = filmDetailsElement.querySelector(`.film-details__close-btn`);
   filmDetailsCloseButton.addEventListener(`click`, onFilmDetailsCloseButtonClick);
 
@@ -82,11 +83,11 @@ const renderFilmsList = (containerElement, films, showingFilmsCount) => {
   films.slice(0, showingFilmsCount)
     .forEach((film) => renderFilm(filmsListContainerElement, film));
 
-  render(filmsListElement, new ShowMoreButtonComponent());
+  const showMoreButtonComponent = new ShowMoreButtonComponent();
 
-  const showMoreButton = filmsListElement.querySelector(`.films-list__show-more`);
+  render(filmsListElement, showMoreButtonComponent);
 
-  showMoreButton.addEventListener(`click`, () => {
+  showMoreButtonComponent.getElement().addEventListener(`click`, () => {
     const prevFilmsCount = showingFilmsCount;
     showingFilmsCount = showingFilmsCount + SHOWING_FILMS_COUNT_BY_BUTTON;
 
@@ -94,7 +95,7 @@ const renderFilmsList = (containerElement, films, showingFilmsCount) => {
       .forEach((film) => renderFilm(filmsListContainerElement, film));
 
     if (showingFilmsCount >= films.length) {
-      showMoreButton.remove();
+      remove(showMoreButtonComponent);
     }
   });
 
