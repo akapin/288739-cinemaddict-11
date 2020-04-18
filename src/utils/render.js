@@ -10,16 +10,16 @@ export const createElement = (template) => {
   return newElement.firstChild;
 };
 
-export const render = (container, element, place = RenderPosition.BEFOREEND) => {
+export const render = (container, component, place = RenderPosition.BEFOREEND) => {
   switch (place) {
     case RenderPosition.AFTERBEGIN:
-      append(container, element);
+      append(container, component.getElement());
       break;
     case RenderPosition.BEFOREEND:
-      append(container, element);
+      append(container, component.getElement());
       break;
     default:
-      append(container, element);
+      append(container, component.getElement());
       break;
   }
 };

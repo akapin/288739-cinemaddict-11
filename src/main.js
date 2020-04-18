@@ -58,7 +58,8 @@ const renderFilm = (containerElement, film) => {
 
   const bodyElement = document.querySelector(`body`);
 
-  const filmElement = new FilmComponent(film).getElement();
+  const filmComponent = new FilmComponent(film);
+  const filmElement = filmComponent.getElement();
   const filmTitle = filmElement.querySelector(`.film-card__title`);
   const filmPoster = filmElement.querySelector(`.film-card__poster`);
   const filmComments = filmElement.querySelector(`.film-card__comments`);
@@ -70,17 +71,18 @@ const renderFilm = (containerElement, film) => {
   const filmDetailsCloseButton = filmDetailsElement.querySelector(`.film-details__close-btn`);
   filmDetailsCloseButton.addEventListener(`click`, onFilmDetailsCloseButtonClick);
 
-  render(containerElement, filmElement);
+  render(containerElement, filmComponent);
 };
 
 const renderFilmsList = (containerElement, films, showingFilmsCount) => {
-  const filmsListElement = new FilmsListComponent().getElement();
+  const filmsListComponent = new FilmsListComponent();
+  const filmsListElement = filmsListComponent.getElement();
   const filmsListContainerElement = filmsListElement.querySelector(`.films-list__container`);
 
   films.slice(0, showingFilmsCount)
     .forEach((film) => renderFilm(filmsListContainerElement, film));
 
-  render(filmsListElement, new ShowMoreButtonComponent().getElement());
+  render(filmsListElement, new ShowMoreButtonComponent());
 
   const showMoreButton = filmsListElement.querySelector(`.films-list__show-more`);
 
@@ -96,26 +98,28 @@ const renderFilmsList = (containerElement, films, showingFilmsCount) => {
     }
   });
 
-  render(containerElement, filmsListElement);
+  render(containerElement, filmsListComponent);
 };
 
 const renderExtraFilmsList = (containerElement, title, films, showingFilmsCount) => {
-  const extraInfoAboutFilmsElement = new ExtraInfoAboutFilmsComponent(title).getElement();
+  const extraInfoAboutFilmsComponent = new ExtraInfoAboutFilmsComponent(title);
+  const extraInfoAboutFilmsElement = extraInfoAboutFilmsComponent.getElement();
   const filmsListContainerElement = extraInfoAboutFilmsElement.querySelector(`.films-list__container`);
 
   films.slice(0, showingFilmsCount)
     .forEach((film) => renderFilm(filmsListContainerElement, film));
 
-  render(containerElement, extraInfoAboutFilmsElement);
+  render(containerElement, extraInfoAboutFilmsComponent);
 };
 
 const renderBoard = (containerElement, films) => {
   if (films.length === 0) {
-    render(containerElement, new NoFilmsComponent().getElement());
+    render(containerElement, new NoFilmsComponent());
     return;
   }
 
-  const boardElement = new BoardComponent().getElement();
+  const boardComponent = new BoardComponent();
+  const boardElement = boardComponent.getElement();
   const filmsSortedByRating = films.slice().sort((a, b) => b.rating - a.rating);
   const filmsSortedByComments = films.slice().sort((a, b) => b.comments.length - a.comments.length);
 
@@ -123,7 +127,7 @@ const renderBoard = (containerElement, films) => {
   renderExtraFilmsList(boardElement, `Top rated`, filmsSortedByRating, SHOWING_TOP_RATED_FILMS_COUNT);
   renderExtraFilmsList(boardElement, `Most commented`, filmsSortedByComments, SHOWING_MOST_COMMENTED_FILMS_COUNT);
 
-  render(containerElement, boardElement);
+  render(containerElement, boardComponent);
 };
 
 const siteHeaderElement = document.querySelector(`.header`);
@@ -135,8 +139,8 @@ const filters = generateFilters();
 const watchedFilmsCount = generateWatchedFilmsCount();
 const filmsAmount = generateFilmsAmount();
 
-render(siteHeaderElement, new ProfileComponent(watchedFilmsCount).getElement());
-render(siteMainElement, new MainNavigationComponent(filters).getElement());
-render(siteMainElement, new SortingComponent().getElement());
+render(siteHeaderElement, new ProfileComponent(watchedFilmsCount));
+render(siteMainElement, new MainNavigationComponent(filters));
+render(siteMainElement, new SortingComponent());
 renderBoard(siteMainElement, films);
-render(footerStatisticsElement, new FilmsAmountComponent(filmsAmount).getElement());
+render(footerStatisticsElement, new FilmsAmountComponent(filmsAmount));
