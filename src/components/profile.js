@@ -1,4 +1,4 @@
-import {createElement} from "../utils.js";
+import AbstractComponent from "./abstract-component.js";
 
 const getUserRank = (watchedFilmsCount) => {
   if (watchedFilmsCount >= 1 && watchedFilmsCount <= 10) {
@@ -21,26 +21,14 @@ const createProfileTemplate = (watchedFilmsCount) => {
   );
 };
 
-export default class Profile {
+export default class Profile extends AbstractComponent {
   constructor(watchedFilmsCount) {
-    this._watchedFilmsCount = watchedFilmsCount;
+    super();
 
-    this._element = null;
+    this._watchedFilmsCount = watchedFilmsCount;
   }
 
   getTemplate() {
     return createProfileTemplate(this._watchedFilmsCount);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
