@@ -13,13 +13,17 @@ export const createElement = (template) => {
 export const render = (container, element, place = RenderPosition.BEFOREEND) => {
   switch (place) {
     case RenderPosition.AFTERBEGIN:
-      container.prepend(element);
+      append(container, element);
       break;
     case RenderPosition.BEFOREEND:
-      container.append(element);
+      append(container, element);
       break;
     default:
-      container.append(element);
+      append(container, element);
       break;
   }
+};
+
+export const append = (parent, element) => {
+  parent.appendChild(element);
 };
