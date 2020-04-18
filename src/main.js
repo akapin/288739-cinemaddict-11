@@ -11,7 +11,7 @@ import FilmsAmountComponent from "./components/films-amount.js";
 import NoFilmsComponent from "./components/no-films.js";
 import {generateFilms, generateWatchedFilmsCount, generateFilmsAmount} from "./mock/film.js";
 import {generateFilters} from "./mock/filter.js";
-import {render, append} from "./utils/render.js";
+import {render, append, remove} from "./utils/render.js";
 
 const FILM_COUNT = 15;
 const SHOWING_FILMS_COUNT_ON_START = 5;
@@ -28,7 +28,7 @@ const renderFilm = (containerElement, film) => {
 
   const closeFilmDetailsPopup = () => {
     bodyElement.classList.remove(`hide-overflow`);
-    bodyElement.removeChild(filmDetailsElement);
+    remove(bodyElement, filmDetailsElement);
     document.removeEventListener(`keydown`, onEscKeyDown);
   };
 

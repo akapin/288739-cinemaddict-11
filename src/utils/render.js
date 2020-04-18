@@ -27,3 +27,7 @@ export const render = (container, element, place = RenderPosition.BEFOREEND) => 
 export const append = (parent, element) => {
   parent.appendChild(element);
 };
+
+export const remove = (parent, element) => {
+  parent.removeChild(element);
+};
