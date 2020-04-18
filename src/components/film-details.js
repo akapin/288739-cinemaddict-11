@@ -1,5 +1,5 @@
 import AbstractComponent from "./abstract-component.js";
-import {castTimeFormat} from "../utils.js";
+import {castTimeFormat} from "../utils/common.js";
 import {MONTH_NAMES} from "../const.js";
 
 const createGenresMarkup = (genres) => {

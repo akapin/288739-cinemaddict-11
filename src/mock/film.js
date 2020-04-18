@@ -1,4 +1,4 @@
-import {getRandomIntegerNumber, getRandomFloatNumber, getRandomArrayItem, getRandomDate} from "../utils.js";
+import {getRandomIntegerNumber, getRandomFloatNumber, getRandomArrayItem, getRandomDate} from "../utils/common.js";
 import {generateComments} from "./comment.js";
 
 const WatchedFilmsCount = {
