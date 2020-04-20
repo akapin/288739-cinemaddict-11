@@ -61,23 +61,22 @@ const renderExtraFilmsList = (containerElement, title, films, showingFilmsCount)
   render(containerElement, extraInfoAboutFilmsComponent);
 };
 
-const getSortedFilms = (films, sortType) => {
+const getSortedFilms = (films, sortType, from, to) => {
   let sortedFilms = [];
   const showingFilms = films.slice();
 
   switch (sortType) {
     case SortType.DATE:
-      sortedFilms = showingFilms.sort((a, b) => a.date - b.date);
+      sortedFilms = showingFilms.sort((a, b) => b.date - a.date);
       break;
     case SortType.RATING:
       sortedFilms = showingFilms.sort((a, b) => b.rating - a.rating);
       break;
-    default:
+    case SortType.DEFAULT:
       sortedFilms = showingFilms;
       break;
   }
-
-  return sortedFilms;
+  return sortedFilms.slice(from, to);
 };
 
 export default class PageController {
@@ -91,10 +90,7 @@ export default class PageController {
     this._filmsListComponent = new FilmsListComponent();
   }
 
-  render(filmsList) {
-    const initialFilmsOrder = filmsList;
-    let films = filmsList;
-
+  render(films) {
     const renderShowMoreButton = () => {
       if (showingFilmsCount >= films.length) {
         return;
@@ -108,7 +104,9 @@ export default class PageController {
         const prevFilmsCount = showingFilmsCount;
         showingFilmsCount = showingFilmsCount + SHOWING_FILMS_COUNT_BY_BUTTON;
 
-        films.slice(prevFilmsCount, showingFilmsCount)
+        const sortedFilms = getSortedFilms(films, this._sortingComponent.getSortType(), prevFilmsCount, showingFilmsCount);
+
+        sortedFilms.slice()
           .forEach((film) => renderFilm(filmsListContainerElement, film));
 
         if (showingFilmsCount >= films.length) {
@@ -142,13 +140,9 @@ export default class PageController {
 
       showingFilmsCount = SHOWING_FILMS_COUNT_BY_BUTTON;
 
-      if (sortType === SortType.DEFAULT) {
-        films = initialFilmsOrder;
-      } else {
-        films = getSortedFilms(films, sortType);
-      }
+      const sortedFilms = getSortedFilms(films, sortType, 0, showingFilmsCount);
 
-      films.slice(0, showingFilmsCount)
+      sortedFilms.slice(0, showingFilmsCount)
         .forEach((film) => renderFilm(filmsListContainerElement, film));
 
       renderShowMoreButton();
