@@ -43,7 +43,7 @@ const createFilmDetailsTemplate = (film) => {
     isInWatchlist, isWatched, isFavorite
   } = film;
 
-  const formattedDate = `${date.getDay()} ${MONTH_NAMES[date.getMonth()]} ${date.getFullYear()}`;
+  const formattedDate = `${date.getDate()} ${MONTH_NAMES[date.getMonth()]} ${date.getFullYear()}`;
   const commentsCount = comments.length;
 
   const genresMarkup = createGenresMarkup(genres);
