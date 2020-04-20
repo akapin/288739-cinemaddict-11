@@ -5,6 +5,7 @@ import FilmComponent from "../components/film.js";
 import FilmDetailsComponent from "../components/film-details.js";
 import ShowMoreButtonComponent from "../components/show-more-button.js";
 import NoFilmsComponent from "../components/no-films.js";
+import SortingComponent from "../components/sorting.js";
 import {render, append, remove} from "../utils/render.js";
 
 const SHOWING_FILMS_COUNT_ON_START = 5;
@@ -93,6 +94,7 @@ export default class PageController {
 
     this._boardComponent = new BoardComponent();
     this._noFilmComponent = new NoFilmsComponent();
+    this._sortingComponent = new SortingComponent();
   }
 
   render(films) {
@@ -105,6 +107,7 @@ export default class PageController {
     const filmsSortedByRating = films.slice().sort((a, b) => b.rating - a.rating);
     const filmsSortedByComments = films.slice().sort((a, b) => b.comments.length - a.comments.length);
 
+    render(this._container, this._sortingComponent);
     renderFilmsList(boardElement, films, SHOWING_FILMS_COUNT_ON_START);
     renderExtraFilmsList(boardElement, `Top rated`, filmsSortedByRating, SHOWING_TOP_RATED_FILMS_COUNT);
     renderExtraFilmsList(boardElement, `Most commented`, filmsSortedByComments, SHOWING_MOST_COMMENTED_FILMS_COUNT);
