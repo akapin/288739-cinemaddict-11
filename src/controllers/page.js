@@ -5,7 +5,7 @@ import FilmComponent from "../components/film.js";
 import FilmDetailsComponent from "../components/film-details.js";
 import ShowMoreButtonComponent from "../components/show-more-button.js";
 import NoFilmsComponent from "../components/no-films.js";
-import SortingComponent from "../components/sorting.js";
+import SortingComponent, {SortType} from "../components/sorting.js";
 import {render, append, remove} from "../utils/render.js";
 
 const SHOWING_FILMS_COUNT_ON_START = 5;
@@ -61,6 +61,25 @@ const renderExtraFilmsList = (containerElement, title, films, showingFilmsCount)
   render(containerElement, extraInfoAboutFilmsComponent);
 };
 
+const getSortedFilms = (films, sortType) => {
+  let sortedFilms = [];
+  const showingFilms = films.slice();
+
+  switch (sortType) {
+    case SortType.DATE:
+      sortedFilms = showingFilms.sort((a, b) => a.date - b.date);
+      break;
+    case SortType.RATING:
+      sortedFilms = showingFilms.sort((a, b) => b.rating - a.rating);
+      break;
+    default:
+      sortedFilms = showingFilms;
+      break;
+  }
+
+  return sortedFilms;
+};
+
 export default class PageController {
   constructor(container) {
     this._container = container;
@@ -72,7 +91,10 @@ export default class PageController {
     this._filmsListComponent = new FilmsListComponent();
   }
 
-  render(films) {
+  render(filmsList) {
+    const initialFilmsOrder = filmsList;
+    let films = filmsList;
+
     const renderShowMoreButton = () => {
       if (showingFilmsCount >= films.length) {
         return;
@@ -115,10 +137,16 @@ export default class PageController {
 
     renderShowMoreButton();
 
-    this._sortingComponent.setSortTypeChangeHandler(() => {
+    this._sortingComponent.setSortTypeChangeHandler((sortType) => {
+      filmsListContainerElement.innerHTML = ``;
+
       showingFilmsCount = SHOWING_FILMS_COUNT_BY_BUTTON;
 
-      filmsListContainerElement.innerHTML = ``;
+      if (sortType === SortType.DEFAULT) {
+        films = initialFilmsOrder;
+      } else {
+        films = getSortedFilms(films, sortType);
+      }
 
       films.slice(0, showingFilmsCount)
         .forEach((film) => renderFilm(filmsListContainerElement, film));
