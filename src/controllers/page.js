@@ -61,6 +61,10 @@ const renderExtraFilmsList = (containerElement, title, films, showingFilmsCount)
   render(containerElement, extraInfoAboutFilmsComponent);
 };
 
+const renderFilms = (filmsListContainerElement, films) => {
+  films.forEach((film) => renderFilm(filmsListContainerElement, film));
+};
+
 const getSortedFilms = (films, sortType, from, to) => {
   let sortedFilms = [];
   const showingFilms = films.slice();
@@ -106,8 +110,7 @@ export default class PageController {
 
         const sortedFilms = getSortedFilms(films, this._sortingComponent.getSortType(), prevFilmsCount, showingFilmsCount);
 
-        sortedFilms.slice()
-          .forEach((film) => renderFilm(filmsListContainerElement, film));
+        renderFilms(filmsListContainerElement, sortedFilms);
 
         if (showingFilmsCount >= films.length) {
           remove(this._showMoreButtonComponent);
@@ -130,8 +133,7 @@ export default class PageController {
 
     let showingFilmsCount = SHOWING_FILMS_COUNT_ON_START;
 
-    films.slice(0, showingFilmsCount)
-        .forEach((film) => renderFilm(filmsListContainerElement, film));
+    renderFilms(filmsListContainerElement, films.slice(0, showingFilmsCount));
 
     renderShowMoreButton();
 
@@ -142,8 +144,7 @@ export default class PageController {
 
       const sortedFilms = getSortedFilms(films, sortType, 0, showingFilmsCount);
 
-      sortedFilms.slice(0, showingFilmsCount)
-        .forEach((film) => renderFilm(filmsListContainerElement, film));
+      renderFilms(filmsListContainerElement, sortedFilms);
 
       renderShowMoreButton();
     });
