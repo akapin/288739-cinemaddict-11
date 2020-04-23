@@ -3,8 +3,9 @@ import MovieDetailsComponent from "../components/movie-details.js";
 import {render, append, remove} from "../utils/render.js";
 
 export default class MovieController {
-  constructor(container) {
+  constructor(container, onDataChange) {
     this._container = container;
+    this._onDataChange = onDataChange;
 
     this._movieComponent = null;
     this._movieDetailsComponent = null;
@@ -28,14 +29,23 @@ export default class MovieController {
 
     this._movieComponent.setAddToWatchlistButtonClickHandler((evt) => {
       evt.preventDefault();
+      this._onDataChange(this, movie, Object.assign({}, movie, {
+        isInWatchlist: !movie.isInWatchlist,
+      }));
     });
 
     this._movieComponent.setAlreadyWatchedButtonClickHandler((evt) => {
       evt.preventDefault();
+      this._onDataChange(this, movie, Object.assign({}, movie, {
+        isWatched: !movie.isWatched,
+      }));
     });
 
     this._movieComponent.setAddToFavoritesButtonClickHandler((evt) => {
       evt.preventDefault();
+      this._onDataChange(this, movie, Object.assign({}, movie, {
+        isFavorite: !movie.isFavorite,
+      }));
     });
 
     this._movieDetailsComponent.setMovieDetailsCloseButtonClickHandler(() => {
@@ -44,14 +54,23 @@ export default class MovieController {
 
     this._movieDetailsComponent.setAddToWatchlistButtonClickHandler((evt) => {
       evt.preventDefault();
+      this._onDataChange(this, movie, Object.assign({}, movie, {
+        isInWatchlist: !movie.isInWatchlist,
+      }));
     });
 
     this._movieDetailsComponent.setAlreadyWatchedButtonClickHandler((evt) => {
       evt.preventDefault();
+      this._onDataChange(this, movie, Object.assign({}, movie, {
+        isWatched: !movie.isWatched,
+      }));
     });
 
     this._movieDetailsComponent.setAddToFavoritesButtonClickHandler((evt) => {
       evt.preventDefault();
+      this._onDataChange(this, movie, Object.assign({}, movie, {
+        isFavorite: !movie.isFavorite,
+      }));
     });
 
     render(this._container, this._movieComponent);
