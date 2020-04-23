@@ -8,6 +8,8 @@ export default class MovieController {
 
     this._movieComponent = null;
     this._movieDetailsComponent = null;
+
+    this._onEscKeyDown = this._onEscKeyDown.bind(this);
   }
 
   render(movie) {
