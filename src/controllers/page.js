@@ -1,54 +1,16 @@
 import BoardComponent from "../components/board.js";
 import FilmsListComponent from "../components/films-list.js";
 import ExtraInfoAboutFilmsComponent from "../components/extra-info-about-films.js";
-import FilmComponent from "../components/film.js";
-import FilmDetailsComponent from "../components/film-details.js";
+import MovieController from "./movie.js";
 import ShowMoreButtonComponent from "../components/show-more-button.js";
 import NoFilmsComponent from "../components/no-films.js";
 import SortingComponent, {SortType} from "../components/sorting.js";
-import {render, append, remove} from "../utils/render.js";
+import {render, remove} from "../utils/render.js";
 
 const SHOWING_FILMS_COUNT_ON_START = 5;
 const SHOWING_FILMS_COUNT_BY_BUTTON = 5;
 const SHOWING_TOP_RATED_FILMS_COUNT = 2;
 const SHOWING_MOST_COMMENTED_FILMS_COUNT = 2;
-
-const renderFilm = (containerElement, film) => {
-  const openFilmDetailsPopup = () => {
-    bodyElement.classList.add(`hide-overflow`);
-    append(bodyElement, filmDetailsComponent);
-    document.addEventListener(`keydown`, onEscKeyDown);
-    filmDetailsComponent.setFilmDetailsCloseButtonClickHandler(closeFilmDetailsPopup);
-  };
-
-  const closeFilmDetailsPopup = () => {
-    bodyElement.classList.remove(`hide-overflow`);
-    remove(filmDetailsComponent);
-    document.removeEventListener(`keydown`, onEscKeyDown);
-  };
-
-  const onEscKeyDown = (evt) => {
-    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
-
-    if (isEscKey) {
-      closeFilmDetailsPopup();
-    }
-  };
-
-  const bodyElement = document.querySelector(`body`);
-
-  const filmComponent = new FilmComponent(film);
-
-  filmComponent.setFilmTitleClickHandler(openFilmDetailsPopup);
-  filmComponent.setFilmPosterClickHandler(openFilmDetailsPopup);
-  filmComponent.setFilmCommentsClickHandler(openFilmDetailsPopup);
-
-  const filmDetailsComponent = new FilmDetailsComponent(film);
-
-  filmDetailsComponent.setFilmDetailsCloseButtonClickHandler(closeFilmDetailsPopup);
-
-  render(containerElement, filmComponent);
-};
 
 const renderExtraFilmsList = (containerElement, title, films, showingFilmsCount) => {
   const extraInfoAboutFilmsComponent = new ExtraInfoAboutFilmsComponent(title);
