@@ -16,11 +16,43 @@ export default class MovieController {
     this._movieComponent = new MovieComponent(movie);
     this._movieDetailsComponent = new MovieDetailsComponent(movie);
 
-    this._movieComponent.setMovieTitleClickHandler(this._openMovieDetailsPopup);
-    this._movieComponent.setMoviePosterClickHandler(this._openMovieDetailsPopup);
-    this._movieComponent.setMovieCommentsClickHandler(this._openMovieDetailsPopup);
+    this._movieComponent.setMovieTitleClickHandler(() => {
+      this._openMovieDetailsPopup();
+    });
+    this._movieComponent.setMoviePosterClickHandler(() => {
+      this._openMovieDetailsPopup();
+    });
+    this._movieComponent.setMovieCommentsClickHandler(() => {
+      this._openMovieDetailsPopup();
+    });
 
-    this._movieDetailsComponent.setMovieDetailsCloseButtonClickHandler(this._closeMovieDetailsPopup);
+    this._movieComponent.setAddToWatchlistButtonClickHandler((evt) => {
+      evt.preventDefault();
+    });
+
+    this._movieComponent.setAlreadyWatchedButtonClickHandler((evt) => {
+      evt.preventDefault();
+    });
+
+    this._movieComponent.setAddToFavoritesButtonClickHandler((evt) => {
+      evt.preventDefault();
+    });
+
+    this._movieDetailsComponent.setMovieDetailsCloseButtonClickHandler(() => {
+      this._closeMovieDetailsPopup();
+    });
+
+    this._movieDetailsComponent.setAddToWatchlistButtonClickHandler((evt) => {
+      evt.preventDefault();
+    });
+
+    this._movieDetailsComponent.setAlreadyWatchedButtonClickHandler((evt) => {
+      evt.preventDefault();
+    });
+
+    this._movieDetailsComponent.setAddToFavoritesButtonClickHandler((evt) => {
+      evt.preventDefault();
+    });
 
     render(this._container, this._movieComponent);
   }
@@ -30,7 +62,9 @@ export default class MovieController {
     bodyElement.classList.add(`hide-overflow`);
     append(bodyElement, this._movieDetailsComponent);
     document.addEventListener(`keydown`, this._onEscKeyDown);
-    this._movieDetailsComponent.setMovieDetailsCloseButtonClickHandler(this._closeMovieDetailsPopup);
+    this._movieDetailsComponent.setMovieDetailsCloseButtonClickHandler(() => {
+      this._closeMovieDetailsPopup();
+    });
   }
 
   _closeMovieDetailsPopup() {
