@@ -36,12 +36,12 @@ const createCommentsMarkup = (comments) => {
     .join(`\n`);
 };
 
-const createFilmDetailsTemplate = (film) => {
+const createMovieDetailsTemplate = (movie) => {
   const {
     poster, title, originTitle, rating, date, duration, genres, country,
     director, screenwriters, actors, ageRating, description, comments,
     isInWatchlist, isWatched, isFavorite
-  } = film;
+  } = movie;
 
   const formattedDate = `${date.getDate()} ${MONTH_NAMES[date.getMonth()]} ${date.getFullYear()}`;
   const commentsCount = comments.length;
@@ -167,18 +167,18 @@ const createFilmDetailsTemplate = (film) => {
   );
 };
 
-export default class FilmDetails extends AbstractComponent {
-  constructor(film) {
+export default class MovieDetails extends AbstractComponent {
+  constructor(movie) {
     super();
 
-    this._film = film;
+    this._movie = movie;
   }
 
   getTemplate() {
-    return createFilmDetailsTemplate(this._film);
+    return createMovieDetailsTemplate(this._movie);
   }
 
-  setFilmDetailsCloseButtonClickHandler(handler) {
+  setMovieDetailsCloseButtonClickHandler(handler) {
     this.getElement().querySelector(`.film-details__close-btn`)
       .addEventListener(`click`, handler);
   }

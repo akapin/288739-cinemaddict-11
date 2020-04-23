@@ -1,6 +1,6 @@
 import AbstractComponent from "./abstract-component.js";
 
-const createExtraInfoAboutFilmsTemplate = (title) => {
+const createExtraInfoAboutMoviesTemplate = (title) => {
   return (
     `<section class="films-list--extra">
       <h2 class="films-list__title">${title}</h2>
@@ -10,7 +10,7 @@ const createExtraInfoAboutFilmsTemplate = (title) => {
   );
 };
 
-export default class ExtraInfoAboutFilms extends AbstractComponent {
+export default class ExtraInfoAboutMovies extends AbstractComponent {
   constructor(title) {
     super();
 
@@ -18,6 +18,6 @@ export default class ExtraInfoAboutFilms extends AbstractComponent {
   }
 
   getTemplate() {
-    return createExtraInfoAboutFilmsTemplate(this._title);
+    return createExtraInfoAboutMoviesTemplate(this._title);
   }
 }

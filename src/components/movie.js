@@ -1,7 +1,7 @@
 import AbstractComponent from "./abstract-component.js";
 
-const createFilmTemplate = (film) => {
-  const {title, rating, date, duration, genres, poster, description, comments, isInWatchlist, isWatched, isFavorite} = film;
+const createMovieTemplate = (movie) => {
+  const {title, rating, date, duration, genres, poster, description, comments, isInWatchlist, isWatched, isFavorite} = movie;
 
   const year = date.getFullYear();
   const commentsCount = comments.length;
@@ -31,28 +31,28 @@ const createFilmTemplate = (film) => {
   );
 };
 
-export default class Film extends AbstractComponent {
-  constructor(film) {
+export default class Movie extends AbstractComponent {
+  constructor(movie) {
     super();
 
-    this._film = film;
+    this._movie = movie;
   }
 
   getTemplate() {
-    return createFilmTemplate(this._film);
+    return createMovieTemplate(this._movie);
   }
 
-  setFilmTitleClickHandler(handler) {
+  setMovieTitleClickHandler(handler) {
     this.getElement().querySelector(`.film-card__title`)
       .addEventListener(`click`, handler);
   }
 
-  setFilmPosterClickHandler(handler) {
+  setMoviePosterClickHandler(handler) {
     this.getElement().querySelector(`.film-card__poster`)
       .addEventListener(`click`, handler);
   }
 
-  setFilmCommentsClickHandler(handler) {
+  setMovieCommentsClickHandler(handler) {
     this.getElement().querySelector(`.film-card__comments`)
       .addEventListener(`click`, handler);
   }

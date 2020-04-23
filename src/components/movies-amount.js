@@ -1,19 +1,19 @@
 import AbstractComponent from "./abstract-component.js";
 
-const createFilmsAmountTemplate = (filmsAmount) => {
+const createMoviesAmountTemplate = (moviesAmount) => {
   return (
-    `<p>${filmsAmount.toLocaleString(`ru-RU`)} movies inside</p>`
+    `<p>${moviesAmount.toLocaleString(`ru-RU`)} movies inside</p>`
   );
 };
 
-export default class FilmsAmount extends AbstractComponent {
-  constructor(filmsAmount) {
+export default class MoviesAmount extends AbstractComponent {
+  constructor(moviesAmount) {
     super();
 
-    this._filmsAmount = filmsAmount;
+    this._moviesAmount = moviesAmount;
   }
 
   getTemplate() {
-    return createFilmsAmountTemplate(this._filmsAmount);
+    return createMoviesAmountTemplate(this._moviesAmount);
   }
 }
