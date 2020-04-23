@@ -1,9 +1,9 @@
 import BoardComponent from "../components/board.js";
-import MoviesComponent from "../components/films-list.js";
-import ExtraInfoAboutMoviesComponent from "../components/extra-info-about-films.js";
+import MoviesComponent from "../components/movies.js";
+import ExtraInfoAboutMoviesComponent from "../components/extra-info-about-movies.js";
 import MovieController from "./movie.js";
 import ShowMoreButtonComponent from "../components/show-more-button.js";
-import NoMoviesComponent from "../components/no-films.js";
+import NoMoviesComponent from "../components/no-movies.js";
 import SortingComponent, {SortType} from "../components/sorting.js";
 import {render, remove} from "../utils/render.js";
 

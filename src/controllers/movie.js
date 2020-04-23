@@ -1,5 +1,5 @@
-import MovieComponent from "../components/film.js";
-import MovieDetailsComponent from "../components/film-details.js";
+import MovieComponent from "../components/movie.js";
+import MovieDetailsComponent from "../components/movie-details.js";
 import {render, append, remove} from "../utils/render.js";
 
 export default class MovieController {

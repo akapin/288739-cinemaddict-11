@@ -1,7 +1,7 @@
 import PageController from "./controllers/page.js";
 import ProfileComponent from "./components/profile.js";
 import MainNavigationComponent from "./components/main-navigation.js";
-import FilmsAmountComponent from "./components/films-amount.js";
+import MoviesAmountComponent from "./components/movies-amount.js";
 import {generateFilms, generateWatchedFilmsCount, generateFilmsAmount} from "./mock/film.js";
 import {generateFilters} from "./mock/filter.js";
 import {render} from "./utils/render.js";
@@ -23,4 +23,4 @@ render(siteMainElement, new MainNavigationComponent(filters));
 const pageController = new PageController(siteMainElement);
 pageController.render(films);
 
-render(footerStatisticsElement, new FilmsAmountComponent(filmsAmount));
+render(footerStatisticsElement, new MoviesAmountComponent(filmsAmount));
