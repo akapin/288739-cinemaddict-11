@@ -1,14 +1,22 @@
 import AbstractComponent from "./abstract-component.js";
 
+const createButtonMarkup = (name, text, isActive = true) => {
+  return (
+    `<button class="film-card__controls-item button film-card__controls-item--${name} ${isActive ? `film-card__controls-item--active` : ``}">
+      ${name}
+    </button>`
+  );
+};
+
 const createMovieTemplate = (movie) => {
   const {title, rating, date, duration, genres, poster, description, comments, isInWatchlist, isWatched, isFavorite} = movie;
 
   const year = date.getFullYear();
   const commentsCount = comments.length;
 
-  const watchlistButtonActiveClass = isInWatchlist ? `film-card__controls-item--active` : ``;
-  const watchedButtonActiveClass = isWatched ? `film-card__controls-item--active` : ``;
-  const favoriteButtonActiveClass = isFavorite ? `film-card__controls-item--active` : ``;
+  const addToWatchlistButton = createButtonMarkup(`add-to-watchlist`, `Add to watchlist`, isInWatchlist);
+  const alreadyWatchedtButton = createButtonMarkup(`mark-as-watched`, `Mark as watched`, isWatched);
+  const addToFavoritesButton = createButtonMarkup(`favorite`, `Mark as favorite`, isFavorite);
 
   return (
     `<article class="film-card">
@@ -23,9 +31,9 @@ const createMovieTemplate = (movie) => {
       <p class="film-card__description">${description}</p>
       <a class="film-card__comments">${commentsCount} comments</a>
       <form class="film-card__controls">
-        <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${watchlistButtonActiveClass}">Add to watchlist</button>
-        <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${watchedButtonActiveClass}">Mark as watched</button>
-        <button class="film-card__controls-item button film-card__controls-item--favorite ${favoriteButtonActiveClass}">Mark as favorite</button>
+        ${addToWatchlistButton}
+        ${alreadyWatchedtButton}
+        ${addToFavoritesButton}
       </form>
     </article>`
   );
