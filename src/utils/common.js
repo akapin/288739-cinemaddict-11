@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export const getRandomArrayItem = (array) => {
   const randomIndex = getRandomIntegerNumber(0, array.length);
 
@@ -22,6 +24,17 @@ export const getRandomDate = () => {
   return targetDate;
 };
 
-export const castTimeFormat = (value) => {
-  return value < 10 ? `0${value}` : String(value);
+export const formatDateTime = (date, format) => {
+  return moment(date).format(format);
+};
+
+export const formatDuration = (minutes) => {
+  const duration = moment.duration(minutes, `minutes`);
+  const hours = duration.hours();
+  const mins = duration.minutes();
+  return `${hours > 0 ? `${hours}h` : ``} ${mins}m`;
+};
+
+export const timeFromNow = (date) => {
+  return moment(date).fromNow();
 };

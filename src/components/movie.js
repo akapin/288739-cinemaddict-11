@@ -1,4 +1,5 @@
 import AbstractComponent from "./abstract-component.js";
+import {formatDateTime, formatDuration} from "../utils/common.js";
 
 const createButtonMarkup = (name, text, isActive = true) => {
   return (
@@ -11,8 +12,9 @@ const createButtonMarkup = (name, text, isActive = true) => {
 const createMovieTemplate = (movie) => {
   const {title, rating, date, duration, genres, poster, description, comments, isInWatchlist, isWatched, isFavorite} = movie;
 
-  const year = date.getFullYear();
+  const year = formatDateTime(date, `YYYY`);
   const commentsCount = comments.length;
+  const formattedDuration = formatDuration(duration);
 
   const addToWatchlistButton = createButtonMarkup(`add-to-watchlist`, `Add to watchlist`, isInWatchlist);
   const alreadyWatchedtButton = createButtonMarkup(`mark-as-watched`, `Mark as watched`, isWatched);
@@ -24,7 +26,7 @@ const createMovieTemplate = (movie) => {
       <p class="film-card__rating">${rating}</p>
       <p class="film-card__info">
         <span class="film-card__year">${year}</span>
-        <span class="film-card__duration">${duration}</span>
+        <span class="film-card__duration">${formattedDuration}</span>
         <span class="film-card__genre">${genres[0]}</span>
       </p>
       <img src="${poster}" alt="" class="film-card__poster">
