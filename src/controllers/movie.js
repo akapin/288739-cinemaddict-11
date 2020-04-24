@@ -2,11 +2,17 @@ import MovieComponent from "../components/movie.js";
 import MovieDetailsComponent from "../components/movie-details.js";
 import {render, append, remove, replace} from "../utils/render.js";
 
+const Mode = {
+  DEFAULT: `default`,
+  POPUP: `popup`,
+};
+
 export default class MovieController {
-  constructor(container, onDataChange) {
+  constructor(container, onDataChange, onViewChange) {
     this._container = container;
     this._onDataChange = onDataChange;
-
+    this._onViewChange = onViewChange;
+    this._mode = Mode.DEFAULT;
     this._movieComponent = null;
     this._movieDetailsComponent = null;
 
@@ -78,15 +84,23 @@ export default class MovieController {
     }
   }
 
+  setDefaultView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._closeMovieDetailsPopup();
+    }
+  }
+
   _openMovieDetailsPopup() {
+    this._onViewChange();
     const bodyElement = document.querySelector(`body`);
     bodyElement.classList.add(`hide-overflow`);
-    append(bodyElement, this._movieDetailsComponent);
     this._movieDetailsComponent.reset();
+    append(bodyElement, this._movieDetailsComponent);
     document.addEventListener(`keydown`, this._onEscKeyDown);
     this._movieDetailsComponent.setMovieDetailsCloseButtonClickHandler(() => {
       this._closeMovieDetailsPopup();
     });
+    this._mode = Mode.POPUP;
   }
 
   _closeMovieDetailsPopup() {
@@ -94,6 +108,7 @@ export default class MovieController {
     bodyElement.classList.remove(`hide-overflow`);
     remove(this._movieDetailsComponent);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
+    this._mode = Mode.DEFAULT;
   }
 
   _onEscKeyDown(evt) {
