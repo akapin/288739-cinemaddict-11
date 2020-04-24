@@ -1,12 +1,12 @@
 import {getRandomIntegerNumber, getRandomFloatNumber, getRandomArrayItem, getRandomDate} from "../utils/common.js";
 import {generateComments} from "./comment.js";
 
-const WatchedFilmsCount = {
+const WatchedMoviesCount = {
   MIN: 0,
   MAX: 30,
 };
 
-const FilmsAmount = {
+const MoviesAmount = {
   MIN: 100000,
   MAX: 200000,
 };
@@ -101,7 +101,7 @@ const ACTORS = [
   `Tom Hanks`,
 ];
 
-const generateFilmDescription = () => {
+const generateMovieDescription = () => {
   const descriptionSentences = TEXT.split(`.`);
   let newDescriptionList = new Set();
   const newDescriptionListSize = getRandomIntegerNumber(1, 6);
@@ -111,7 +111,7 @@ const generateFilmDescription = () => {
   return Array.from(newDescriptionList).join(`. `);
 };
 
-const generateFilmDuration = () => {
+const generateMovieDuration = () => {
   const hours = getRandomIntegerNumber(1, 3);
   const minutes = getRandomIntegerNumber(0, 60);
 
@@ -133,21 +133,21 @@ const generateActorsList = () => generateRandomList(ACTORS, 3);
 
 const generateScreenwritersList = () => generateRandomList(SCREENWRITERS, 3);
 
-const generateFilm = () => {
+const generateMovie = () => {
   return {
     poster: getRandomArrayItem(POSTERS),
     title: getRandomArrayItem(TITLES),
     originTitle: getRandomArrayItem(TITLES),
     rating: getRandomFloatNumber(0.0, 10.0),
     date: getRandomDate(),
-    duration: generateFilmDuration(),
+    duration: generateMovieDuration(),
     genres: generateGenresList(),
     country: getRandomArrayItem(COUNTRIES),
     director: getRandomArrayItem(DIRECTORS),
     screenwriters: generateScreenwritersList(),
     actors: generateActorsList(),
     ageRating: getRandomArrayItem(AGE_RATINGS),
-    description: generateFilmDescription(),
+    description: generateMovieDescription(),
     comments: generateComments(getRandomIntegerNumber(0, 6)),
     isInWatchlist: Math.random() > 0.5,
     isWatched: Math.random() > 0.5,
@@ -155,13 +155,13 @@ const generateFilm = () => {
   };
 };
 
-const generateFilms = (count) => {
+const generateMovies = (count) => {
   return new Array(count)
     .fill(``)
-    .map(generateFilm);
+    .map(generateMovie);
 };
 
-const generateWatchedFilmsCount = () => getRandomIntegerNumber(WatchedFilmsCount.MIN, WatchedFilmsCount.MAX + 1);
-const generateFilmsAmount = () => getRandomIntegerNumber(FilmsAmount.MIN, FilmsAmount.MAX + 1);
+const generateWatchedMoviesCount = () => getRandomIntegerNumber(WatchedMoviesCount.MIN, WatchedMoviesCount.MAX + 1);
+const generateMoviesAmount = () => getRandomIntegerNumber(MoviesAmount.MIN, MoviesAmount.MAX + 1);
 
-export {generateFilms, generateWatchedFilmsCount, generateFilmsAmount};
+export {generateMovies, generateWatchedMoviesCount, generateMoviesAmount};
