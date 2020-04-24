@@ -1,4 +1,4 @@
-import AbstractComponent from "./abstract-component.js";
+import AbstractSmartComponent from "./abstract-smart-component.js";
 import {castTimeFormat} from "../utils/common.js";
 import {MONTH_NAMES} from "../const.js";
 
@@ -43,12 +43,14 @@ const createCommentsMarkup = (comments) => {
     .join(`\n`);
 };
 
-const createMovieDetailsTemplate = (movie) => {
+const createMovieDetailsTemplate = (movie, options = {}) => {
   const {
     poster, title, originTitle, rating, date, duration, genres, country,
     director, screenwriters, actors, ageRating, description, comments,
     isInWatchlist, isWatched, isFavorite
   } = movie;
+
+  const {newComment} = options;
 
   const formattedDate = `${date.getDate()} ${MONTH_NAMES[date.getMonth()]} ${date.getFullYear()}`;
   const commentsCount = comments.length;
@@ -140,7 +142,9 @@ const createMovieDetailsTemplate = (movie) => {
             </ul>
 
             <div class="film-details__new-comment">
-              <div for="add-emoji" class="film-details__add-emoji-label"></div>
+              <div for="add-emoji" class="film-details__add-emoji-label">
+                ${ newComment.emoji ? `<img src="images/emoji/${newComment.emoji}.png" width="55" height="55" alt="emoji-smile">` : ``}
+              </div>
 
               <label class="film-details__comment-label">
                 <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
@@ -175,20 +179,55 @@ const createMovieDetailsTemplate = (movie) => {
   );
 };
 
-export default class MovieDetails extends AbstractComponent {
+export default class MovieDetails extends AbstractSmartComponent {
   constructor(movie) {
     super();
 
     this._movie = movie;
+
+    this._newComment = {
+      text: ``,
+      emoji: ``,
+      author: ``,
+      date: null,
+    };
+
+    this._movieDetailsCloseButtonClickHandler = null;
+
+    this._subscribeOnEvents();
   }
 
   getTemplate() {
-    return createMovieDetailsTemplate(this._movie);
+    return createMovieDetailsTemplate(this._movie, {
+      newComment: this._newComment,
+    });
+  }
+
+  recoveryListeners() {
+    this.setMovieDetailsCloseButtonClickHandler(this._movieDetailsCloseButtonClickHandler);
+    this._subscribeOnEvents();
+  }
+
+  rerender() {
+    super.rerender();
+  }
+
+  reset() {
+    this._newComment = {
+      text: ``,
+      emoji: ``,
+      author: ``,
+      date: null,
+    };
+
+    this.rerender();
   }
 
   setMovieDetailsCloseButtonClickHandler(handler) {
     this.getElement().querySelector(`.film-details__close-btn`)
       .addEventListener(`click`, handler);
+
+    this._movieDetailsCloseButtonClickHandler = handler;
   }
 
   setAddToWatchlistButtonClickHandler(handler) {
@@ -204,5 +243,15 @@ export default class MovieDetails extends AbstractComponent {
   setAddToFavoritesButtonClickHandler(handler) {
     this.getElement().querySelector(`.film-details__control-label--favorite`)
       .addEventListener(`click`, handler);
+  }
+
+  _subscribeOnEvents() {
+    const element = this.getElement();
+
+    element.querySelector(`.film-details__emoji-list`)
+      .addEventListener(`change`, (evt) => {
+        this._newComment.emoji = evt.target.value;
+        this.rerender();
+      });
   }
 }

@@ -12,15 +12,6 @@ const SHOWING_MOVIES_COUNT_BY_BUTTON = 5;
 const SHOWING_TOP_RATED_MOVIES_COUNT = 2;
 const SHOWING_MOST_COMMENTED_MOVIES_COUNT = 2;
 
-const renderExtraMovieList = (containerElement, title, movies, showingMoviesCount) => {
-  const extraInfoAboutMoviesComponent = new ExtraInfoAboutMoviesComponent(title);
-  const extraInfoAboutMoviesElement = extraInfoAboutMoviesComponent.getElement();
-  const moviesContainerElement = extraInfoAboutMoviesElement.querySelector(`.films-list__container`);
-
-  renderMovies(moviesContainerElement, movies.slice(0, showingMoviesCount));
-  render(containerElement, extraInfoAboutMoviesComponent);
-};
-
 const renderMovies = (moviesContainerElement, movies, onDataChange) => {
   return movies.map((movie) => {
     const movieController = new MovieController(moviesContainerElement, onDataChange);
@@ -90,10 +81,19 @@ export default class PageController {
     const moviesSortedByRating = this._movies.slice().sort((a, b) => b.rating - a.rating);
     const moviesSortedByComments = this._movies.slice().sort((a, b) => b.comments.length - a.comments.length);
 
-    renderExtraMovieList(boardElement, `Top rated`, moviesSortedByRating, SHOWING_TOP_RATED_MOVIES_COUNT);
-    renderExtraMovieList(boardElement, `Most commented`, moviesSortedByComments, SHOWING_MOST_COMMENTED_MOVIES_COUNT);
+    this._renderExtraMovieList(boardElement, `Top rated`, moviesSortedByRating, SHOWING_TOP_RATED_MOVIES_COUNT);
+    this._renderExtraMovieList(boardElement, `Most commented`, moviesSortedByComments, SHOWING_MOST_COMMENTED_MOVIES_COUNT);
 
     render(this._container, this._boardComponent);
+  }
+
+  _renderExtraMovieList(containerElement, title, movies, showingMoviesCount) {
+    const extraInfoAboutMoviesComponent = new ExtraInfoAboutMoviesComponent(title);
+    const extraInfoAboutMoviesElement = extraInfoAboutMoviesComponent.getElement();
+    const moviesContainerElement = extraInfoAboutMoviesElement.querySelector(`.films-list__container`);
+
+    renderMovies(moviesContainerElement, movies.slice(0, showingMoviesCount), this._onDataChange);
+    render(containerElement, extraInfoAboutMoviesComponent);
   }
 
   _renderShowMoreButton() {

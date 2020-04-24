@@ -1,6 +1,6 @@
 import MovieComponent from "../components/movie.js";
 import MovieDetailsComponent from "../components/movie-details.js";
-import {render, append, remove} from "../utils/render.js";
+import {render, append, remove, replace} from "../utils/render.js";
 
 export default class MovieController {
   constructor(container, onDataChange) {
@@ -14,6 +14,7 @@ export default class MovieController {
   }
 
   render(movie) {
+    const oldMovieComponent = this._movieComponent;
     this._movieComponent = new MovieComponent(movie);
     this._movieDetailsComponent = new MovieDetailsComponent(movie);
 
@@ -52,34 +53,36 @@ export default class MovieController {
       this._closeMovieDetailsPopup();
     });
 
-    this._movieDetailsComponent.setAddToWatchlistButtonClickHandler((evt) => {
-      evt.preventDefault();
+    this._movieDetailsComponent.setAddToWatchlistButtonClickHandler(() => {
       this._onDataChange(this, movie, Object.assign({}, movie, {
         isInWatchlist: !movie.isInWatchlist,
       }));
     });
 
-    this._movieDetailsComponent.setAlreadyWatchedButtonClickHandler((evt) => {
-      evt.preventDefault();
+    this._movieDetailsComponent.setAlreadyWatchedButtonClickHandler(() => {
       this._onDataChange(this, movie, Object.assign({}, movie, {
         isWatched: !movie.isWatched,
       }));
     });
 
-    this._movieDetailsComponent.setAddToFavoritesButtonClickHandler((evt) => {
-      evt.preventDefault();
+    this._movieDetailsComponent.setAddToFavoritesButtonClickHandler(() => {
       this._onDataChange(this, movie, Object.assign({}, movie, {
         isFavorite: !movie.isFavorite,
       }));
     });
 
-    render(this._container, this._movieComponent);
+    if (oldMovieComponent) {
+      replace(this._movieComponent, oldMovieComponent);
+    } else {
+      render(this._container, this._movieComponent);
+    }
   }
 
   _openMovieDetailsPopup() {
     const bodyElement = document.querySelector(`body`);
     bodyElement.classList.add(`hide-overflow`);
     append(bodyElement, this._movieDetailsComponent);
+    this._movieDetailsComponent.reset();
     document.addEventListener(`keydown`, this._onEscKeyDown);
     this._movieDetailsComponent.setMovieDetailsCloseButtonClickHandler(() => {
       this._closeMovieDetailsPopup();
