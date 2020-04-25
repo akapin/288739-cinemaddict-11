@@ -1,5 +1,5 @@
 import AbstractComponent from "./abstract-component.js";
-import {formatDateTime, formatDuration} from "../utils/common.js";
+import {formatDateTime, formatDuration, DateTimeFormat} from "../utils/common.js";
 
 const createButtonMarkup = (name, text, isActive = true) => {
   return (
@@ -12,7 +12,7 @@ const createButtonMarkup = (name, text, isActive = true) => {
 const createMovieTemplate = (movie) => {
   const {title, rating, date, duration, genres, poster, description, comments, isInWatchlist, isWatched, isFavorite} = movie;
 
-  const year = formatDateTime(date, `YYYY`);
+  const year = formatDateTime(date, DateTimeFormat.YEAR);
   const commentsCount = comments.length;
   const formattedDuration = formatDuration(duration);
 

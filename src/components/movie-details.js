@@ -1,5 +1,5 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
-import {formatDateTime, formatDuration, timeFromNow} from "../utils/common.js";
+import {formatDateTime, formatDuration, timeFromNow, DateTimeFormat} from "../utils/common.js";
 
 const createButtonMarkup = (name, text, isChecked = true) => {
   return (
@@ -50,7 +50,7 @@ const createMovieDetailsTemplate = (movie, options = {}) => {
 
   const {newComment} = options;
 
-  const formattedDate = formatDateTime(date, `D MMMM YYYY`);
+  const formattedDate = formatDateTime(date, DateTimeFormat.DATE);
   const formattedDuration = formatDuration(duration);
   const commentsCount = comments.length;
 

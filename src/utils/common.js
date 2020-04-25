@@ -1,5 +1,10 @@
 import moment from "moment";
 
+export const DateTimeFormat = {
+  YEAR: `YYYY`,
+  DATE: `D MMMM YYYY`,
+};
+
 export const getRandomArrayItem = (array) => {
   const randomIndex = getRandomIntegerNumber(0, array.length);
 
