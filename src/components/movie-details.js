@@ -1,6 +1,5 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
-import {castTimeFormat} from "../utils/common.js";
-import {MONTH_NAMES} from "../const.js";
+import {formatDateTime, formatDuration, timeFromNow, DateTimeFormat} from "../utils/common.js";
 
 const createButtonMarkup = (name, text, isChecked = true) => {
   return (
@@ -21,8 +20,7 @@ const createCommentsMarkup = (comments) => {
   return comments
     .map((comment) => {
       const {emoji, text, author, date} = comment;
-      const formattedDate = `${date.getFullYear()}/${castTimeFormat(date.getMonth() + 1)}/${castTimeFormat(date.getDay() + 1)}
-      ${castTimeFormat(date.getHours())}:${castTimeFormat(date.getMinutes())}`;
+      const formattedDate = timeFromNow(date);
 
       return (
         `<li class="film-details__comment">
@@ -52,7 +50,8 @@ const createMovieDetailsTemplate = (movie, options = {}) => {
 
   const {newComment} = options;
 
-  const formattedDate = `${date.getDate()} ${MONTH_NAMES[date.getMonth()]} ${date.getFullYear()}`;
+  const formattedDate = formatDateTime(date, DateTimeFormat.DATE);
+  const formattedDuration = formatDuration(duration);
   const commentsCount = comments.length;
 
   const genresMarkup = createGenresMarkup(genres);
@@ -107,7 +106,7 @@ const createMovieDetailsTemplate = (movie, options = {}) => {
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Runtime</td>
-                  <td class="film-details__cell">${duration}</td>
+                  <td class="film-details__cell">${formattedDuration}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Country</td>

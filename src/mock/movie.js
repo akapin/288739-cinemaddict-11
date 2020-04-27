@@ -111,13 +111,6 @@ const generateMovieDescription = () => {
   return Array.from(newDescriptionList).join(`. `);
 };
 
-const generateMovieDuration = () => {
-  const hours = getRandomIntegerNumber(1, 3);
-  const minutes = getRandomIntegerNumber(0, 60);
-
-  return `${hours}h ${minutes}m`;
-};
-
 const generateRandomList = (array, maxSize) => {
   let newList = new Set();
   const newListSize = getRandomIntegerNumber(1, maxSize + 1);
@@ -140,7 +133,7 @@ const generateMovie = () => {
     originTitle: getRandomArrayItem(TITLES),
     rating: getRandomFloatNumber(0.0, 10.0),
     date: getRandomDate(),
-    duration: generateMovieDuration(),
+    duration: getRandomIntegerNumber(0, 180),
     genres: generateGenresList(),
     country: getRandomArrayItem(COUNTRIES),
     director: getRandomArrayItem(DIRECTORS),
