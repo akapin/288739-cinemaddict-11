@@ -90,6 +90,12 @@ export default class MovieController {
     }
   }
 
+  destroy() {
+    remove(this._movieDetailsComponent);
+    remove(this._movieComponent);
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
+  }
+
   _openMovieDetailsPopup() {
     this._onViewChange();
     const bodyElement = document.querySelector(`body`);

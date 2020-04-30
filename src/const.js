@@ -1,6 +1,6 @@
 export const FilterType = {
   ALL: `all`,
   WATCHLIST: `watchlist`,
-  HISTORY: `history`,
+  WATCHED: `history`,
   FAVORITES: `favorites`,
 };

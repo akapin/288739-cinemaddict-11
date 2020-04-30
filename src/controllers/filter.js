@@ -19,12 +19,12 @@ export default class FilterController {
 
   render() {
     const container = this._container;
-    const allMovies = this._moviesModel.getMovies();
+    const allMovies = this._moviesModel.getMoviesAll();
     const filters = Object.values(FilterType).map((filterType) => {
       return {
         name: filterType,
         count: getMoviesByFilter(allMovies, filterType).length,
-        checked: filterType === this._activeFilterType,
+        active: filterType === this._activeFilterType,
       };
     });
     const oldComponent = this._mainNavigationComponent;
@@ -42,6 +42,7 @@ export default class FilterController {
   _onFilterChange(filterType) {
     this._moviesModel.setFilter(filterType);
     this._activeFilterType = filterType;
+    this.render();
   }
 
   _onDataChange() {

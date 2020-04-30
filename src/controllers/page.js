@@ -44,6 +44,7 @@ export default class PageController {
     this._moviesModel = moviesModel;
 
     this._showedMovieControllers = [];
+    this._showedMovieExtraControllers = [];
     this._showingMoviesCount = SHOWING_MOVIES_COUNT_ON_START;
     this._boardComponent = new BoardComponent();
     this._noMoviesComponent = new NoMoviesComponent();
@@ -54,7 +55,9 @@ export default class PageController {
     this._onDataChange = this._onDataChange.bind(this);
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
+    this._onFilterChange = this._onFilterChange.bind(this);
     this._sortingComponent.setSortTypeChangeHandler(this._onSortTypeChange);
+    this._moviesModel.setFilterChangeHandler(this._onFilterChange);
   }
 
   render() {
@@ -76,13 +79,14 @@ export default class PageController {
 
     this._renderShowMoreButton();
 
-    const moviesSortedByRating = movies.slice().sort((a, b) => b.rating - a.rating);
-    const moviesSortedByComments = movies.slice().sort((a, b) => b.comments.length - a.comments.length);
-
-    this._renderExtraMovieList(boardElement, `Top rated`, moviesSortedByRating, SHOWING_TOP_RATED_MOVIES_COUNT);
-    this._renderExtraMovieList(boardElement, `Most commented`, moviesSortedByComments, SHOWING_MOST_COMMENTED_MOVIES_COUNT);
+    this._renderExtraMovieListSection();
 
     render(this._container, this._boardComponent);
+  }
+
+  _removeMovies() {
+    this._showedMovieControllers.forEach((movieController) => movieController.destroy());
+    this._showedMovieControllers = [];
   }
 
   _renderMovies(movies) {
@@ -92,13 +96,24 @@ export default class PageController {
     this._showingMoviesCount = this._showedMovieControllers.length;
   }
 
+  _renderExtraMovieListSection() {
+    const boardElement = this._boardComponent.getElement();
+    const movies = this._moviesModel.getMovies();
+
+    const moviesSortedByRating = movies.slice().sort((a, b) => b.rating - a.rating);
+    const moviesSortedByComments = movies.slice().sort((a, b) => b.comments.length - a.comments.length);
+
+    this._renderExtraMovieList(boardElement, `Top rated`, moviesSortedByRating, SHOWING_TOP_RATED_MOVIES_COUNT);
+    this._renderExtraMovieList(boardElement, `Most commented`, moviesSortedByComments, SHOWING_MOST_COMMENTED_MOVIES_COUNT);
+  }
+
   _renderExtraMovieList(containerElement, title, movies, showingMoviesCount) {
     const extraInfoAboutMoviesComponent = new ExtraInfoAboutMoviesComponent(title);
     const extraInfoAboutMoviesElement = extraInfoAboutMoviesComponent.getElement();
     const moviesContainerElement = extraInfoAboutMoviesElement.querySelector(`.films-list__container`);
 
     const newMovies = renderMovies(moviesContainerElement, movies.slice(0, showingMoviesCount), this._onDataChange, this._onViewChange);
-    this._showedMovieControllers = this._showedMovieControllers.concat(newMovies);
+    this._showedMovieExtraControllers = this._showedMovieExtraControllers.concat(newMovies);
     render(containerElement, extraInfoAboutMoviesComponent);
   }
 
@@ -129,6 +144,12 @@ export default class PageController {
     });
   }
 
+  _updateMovies(count) {
+    this._removeMovies();
+    this._renderMovies(this._moviesModel.getMovies().slice(0, count));
+    this._renderShowMoreButton();
+  }
+
   _onDataChange(movieController, oldData, newData) {
     const isSuccess = this._moviesModel.updateMovie(oldData.id, newData);
 
@@ -139,6 +160,7 @@ export default class PageController {
 
   _onViewChange() {
     this._showedMovieControllers.forEach((it) => it.setDefaultView());
+    this._showedMovieExtraControllers.forEach((it) => it.setDefaultView());
   }
 
   _onSortTypeChange(sortType) {
@@ -152,5 +174,9 @@ export default class PageController {
     this._showedMovieControllers = newMovies;
 
     this._renderShowMoreButton();
+  }
+
+  _onFilterChange() {
+    this._updateMovies(SHOWING_MOVIES_COUNT_ON_START);
   }
 }
