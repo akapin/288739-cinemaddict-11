@@ -2,6 +2,7 @@ import CommentsSectionComponent from "../components/movie-comments-section.js";
 import NewCommentFormComponent from "../components/new-comment-form.js";
 import CommentController from "./comment.js";
 import {render, remove} from "../utils/render.js";
+import {Key} from "../const.js";
 
 export default class CommentsController {
   constructor(container, moviesModel, movie) {
@@ -65,7 +66,7 @@ export default class CommentsController {
   }
 
   _onCtrlEnterKeyDown(evt) {
-    const isCtrlEnterPressed = evt.ctrlKey && evt.key === `Enter`;
+    const isCtrlEnterPressed = evt.ctrlKey && evt.key === Key.ENTER;
 
     if (!isCtrlEnterPressed) {
       return;

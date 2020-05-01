@@ -2,6 +2,7 @@ import MovieComponent from "../components/movie.js";
 import MovieDetailsComponent from "../components/movie-details.js";
 import CommentsController from "./comments.js";
 import {render, append, remove, replace} from "../utils/render.js";
+import {Key} from "../const.js";
 
 const Mode = {
   DEFAULT: `default`,
@@ -130,7 +131,7 @@ export default class MovieController {
   }
 
   _onEscKeyDown(evt) {
-    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+    const isEscKey = evt.key === Key.ESCAPE || evt.key === Key.ESC;
 
     if (isEscKey) {
       this._closeMovieDetailsPopup();

@@ -4,3 +4,9 @@ export const FilterType = {
   WATCHED: `history`,
   FAVORITES: `favorites`,
 };
+
+export const Key = {
+  ESC: `Esc`,
+  ESCAPE: `Escape`,
+  ENTER: `Enter`
+}
