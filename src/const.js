@@ -9,4 +9,4 @@ export const Key = {
   ESC: `Esc`,
   ESCAPE: `Escape`,
   ENTER: `Enter`
-}
+};

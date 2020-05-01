@@ -1,12 +1,11 @@
-import AbstractSmartComponent from "./abstract-smart-component.js";
-import {encode} from "he";
+import AbstractComponent from "./abstract-component.js";
 
 const createNewCommentFormTemplate = (newComment) => {
   const {emoji, text} = newComment;
   return (
     `<div class="film-details__new-comment">
       <div for="add-emoji" class="film-details__add-emoji-label">
-        ${emoji ? `<img src="images/emoji/${emoji}.png" width="55" height="55" alt="emoji-smile">` : ``}
+        ${emoji ? `<img src="${emoji}" width="55" height="55" alt="emoji-smile">` : ``}
       </div>
 
       <label class="film-details__comment-label">
@@ -38,69 +37,28 @@ const createNewCommentFormTemplate = (newComment) => {
   );
 };
 
-export default class NewCommentForm extends AbstractSmartComponent {
-  constructor() {
+export default class NewCommentForm extends AbstractComponent {
+  constructor(newComment) {
     super();
-
-    this._newComment = {
-      text: ``,
-      emoji: ``,
-      author: ``,
-      date: null,
-    };
-
-    this._subscribeOnEvents();
-  }
-
-  recoveryListeners() {
-    this._subscribeOnEvents();
-  }
-
-  rerender() {
-    super.rerender();
-  }
-
-  reset() {
-    this._newComment = {
-      text: ``,
-      emoji: ``,
-      author: ``,
-      date: null,
-    };
-
-    this.rerender();
+    this._newComment = newComment;
   }
 
   getTemplate() {
     return createNewCommentFormTemplate(this._newComment);
   }
 
-  getData() {
-    const image = this.getElement().querySelector(`.film-details__add-emoji-label img`);
-    const imageSrc = image ? image.src : ``;
-    const inputValue = this.getElement().querySelector(`.film-details__comment-input`).value;
-
-    return {
-      id: String(new Date() + Math.random()),
-      text: inputValue,
-      emoji: imageSrc,
-      author: `Me`,
-      date: new Date(),
-    };
+  submitInputText() {
+    const inputElement = this.getElement().querySelector(`.film-details__comment-input`);
+    inputElement.dispatchEvent(new Event(`change`));
   }
 
-  _subscribeOnEvents() {
-    const element = this.getElement();
+  setChangeInputFieldHandler(handler) {
+    this.getElement().querySelector(`.film-details__comment-input`)
+      .addEventListener(`change`, handler);
+  }
 
-    element.querySelector(`.film-details__comment-input`)
-      .addEventListener(`change`, (evt) => {
-        this._newComment.text = encode(evt.target.value);
-      });
-
-    element.querySelector(`.film-details__emoji-list`)
-      .addEventListener(`input`, (evt) => {
-        this._newComment.emoji = evt.target.value;
-        this.rerender();
-      });
+  setChangeEmojiHandler(handler) {
+    this.getElement().querySelector(`.film-details__emoji-list`)
+      .addEventListener(`input`, handler);
   }
 }
