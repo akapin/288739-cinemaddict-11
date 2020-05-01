@@ -1,4 +1,5 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
+import {encode} from "he";
 
 const createNewCommentFormTemplate = (newComment) => {
   const {emoji, text} = newComment;
@@ -93,7 +94,7 @@ export default class NewCommentForm extends AbstractSmartComponent {
 
     element.querySelector(`.film-details__comment-input`)
       .addEventListener(`change`, (evt) => {
-        this._newComment.text = evt.target.value;
+        this._newComment.text = encode(evt.target.value);
       });
 
     element.querySelector(`.film-details__emoji-list`)
