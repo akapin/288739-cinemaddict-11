@@ -43,3 +43,7 @@ export const formatDuration = (minutes) => {
 export const timeFromNow = (date) => {
   return moment(date).fromNow();
 };
+
+export const capitalizeFirstLetter = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};

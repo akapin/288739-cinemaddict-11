@@ -128,6 +128,7 @@ const generateScreenwritersList = () => generateRandomList(SCREENWRITERS, 3);
 
 const generateMovie = () => {
   return {
+    id: String(new Date() + Math.random()),
     poster: getRandomArrayItem(POSTERS),
     title: getRandomArrayItem(TITLES),
     originTitle: getRandomArrayItem(TITLES),

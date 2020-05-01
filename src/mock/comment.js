@@ -23,6 +23,7 @@ const AUTHORS = [
 
 const generateComment = () => {
   return {
+    id: String(new Date() + Math.random()),
     text: getRandomArrayItem(TEXTS),
     emoji: getRandomArrayItem(EMOJIS),
     author: getRandomArrayItem(AUTHORS),
