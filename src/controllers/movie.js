@@ -1,5 +1,6 @@
 import MovieComponent from "../components/movie.js";
 import MovieDetailsComponent from "../components/movie-details.js";
+import CommentsController from "./comments.js";
 import {render, append, remove, replace} from "../utils/render.js";
 
 const Mode = {
@@ -8,13 +9,16 @@ const Mode = {
 };
 
 export default class MovieController {
-  constructor(container, onDataChange, onViewChange) {
+  constructor(container, moviesModel, onDataChange, onViewChange) {
     this._container = container;
     this._onDataChange = onDataChange;
     this._onViewChange = onViewChange;
     this._mode = Mode.DEFAULT;
     this._movieComponent = null;
     this._movieDetailsComponent = null;
+    this._moviesModel = moviesModel;
+    this._movie = null;
+    this._commentsController = null;
 
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
   }
@@ -23,6 +27,7 @@ export default class MovieController {
     const oldMovieComponent = this._movieComponent;
     this._movieComponent = new MovieComponent(movie);
     this._movieDetailsComponent = new MovieDetailsComponent(movie);
+    this._movie = movie;
 
     this._movieComponent.setMovieTitleClickHandler(() => {
       this._openMovieDetailsPopup();
@@ -96,12 +101,18 @@ export default class MovieController {
     document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
 
+  _renderMovieCommentsSection() {
+    const commentsSectionContainerElement = this._movieDetailsComponent.getElement().querySelector(`.form-details__bottom-container`);
+    this._commentsController = new CommentsController(commentsSectionContainerElement, this._moviesModel, this._movie);
+    this._commentsController.render();
+  }
+
   _openMovieDetailsPopup() {
     this._onViewChange();
     const bodyElement = document.querySelector(`body`);
     bodyElement.classList.add(`hide-overflow`);
-    this._movieDetailsComponent.reset();
     append(bodyElement, this._movieDetailsComponent);
+    this._renderMovieCommentsSection();
     document.addEventListener(`keydown`, this._onEscKeyDown);
     this._movieDetailsComponent.setMovieDetailsCloseButtonClickHandler(() => {
       this._closeMovieDetailsPopup();
@@ -113,6 +124,7 @@ export default class MovieController {
     const bodyElement = document.querySelector(`body`);
     bodyElement.classList.remove(`hide-overflow`);
     remove(this._movieDetailsComponent);
+    this._commentsController.destroy();
     document.removeEventListener(`keydown`, this._onEscKeyDown);
     this._mode = Mode.DEFAULT;
   }

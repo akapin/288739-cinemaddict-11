@@ -1,5 +1,5 @@
-import AbstractSmartComponent from "./abstract-smart-component.js";
-import {formatDateTime, formatDuration, timeFromNow, DateTimeFormat} from "../utils/common.js";
+import AbstractComponent from "./abstract-component.js";
+import {formatDateTime, formatDuration, DateTimeFormat} from "../utils/common.js";
 
 const createButtonMarkup = (name, text, isChecked = true) => {
   return (
@@ -16,46 +16,17 @@ const createGenresMarkup = (genres) => {
     .join(`\n`);
 };
 
-const createCommentsMarkup = (comments) => {
-  return comments
-    .map((comment) => {
-      const {emoji, text, author, date} = comment;
-      const formattedDate = timeFromNow(date);
-
-      return (
-        `<li class="film-details__comment">
-          <span class="film-details__comment-emoji">
-            <img src="${emoji}" width="55" height="55" alt="emoji-smile">
-          </span>
-          <div>
-            <p class="film-details__comment-text">${text}</p>
-            <p class="film-details__comment-info">
-              <span class="film-details__comment-author">${author}</span>
-              <span class="film-details__comment-day">${formattedDate}</span>
-              <button class="film-details__comment-delete">Delete</button>
-            </p>
-          </div>
-        </li>`
-      );
-    })
-    .join(`\n`);
-};
-
-const createMovieDetailsTemplate = (movie, options = {}) => {
+const createMovieDetailsTemplate = (movie) => {
   const {
     poster, title, originTitle, rating, date, duration, genres, country,
-    director, screenwriters, actors, ageRating, description, comments,
+    director, screenwriters, actors, ageRating, description,
     isInWatchlist, isWatched, isFavorite
   } = movie;
 
-  const {newComment} = options;
-
   const formattedDate = formatDateTime(date, DateTimeFormat.DATE);
   const formattedDuration = formatDuration(duration);
-  const commentsCount = comments.length;
 
   const genresMarkup = createGenresMarkup(genres);
-  const commentsMarkup = createCommentsMarkup(comments);
 
   const addToWatchlistButton = createButtonMarkup(`watchlist`, `Add to watchlist`, isInWatchlist);
   const alreadyWatchedtButton = createButtonMarkup(`watched`, `Already watched`, isWatched);
@@ -132,101 +103,25 @@ const createMovieDetailsTemplate = (movie, options = {}) => {
           </section>
         </div>
 
-        <div class="form-details__bottom-container">
-          <section class="film-details__comments-wrap">
-            <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${commentsCount}</span></h3>
-
-            <ul class="film-details__comments-list">
-              ${commentsMarkup}
-            </ul>
-
-            <div class="film-details__new-comment">
-              <div for="add-emoji" class="film-details__add-emoji-label">
-                ${ newComment.emoji ? `<img src="images/emoji/${newComment.emoji}.png" width="55" height="55" alt="emoji-smile">` : ``}
-              </div>
-
-              <label class="film-details__comment-label">
-                <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
-              </label>
-
-              <div class="film-details__emoji-list">
-                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile">
-                <label class="film-details__emoji-label" for="emoji-smile">
-                  <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
-                </label>
-
-                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping">
-                <label class="film-details__emoji-label" for="emoji-sleeping">
-                  <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
-                </label>
-
-                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke">
-                <label class="film-details__emoji-label" for="emoji-puke">
-                  <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
-                </label>
-
-                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry">
-                <label class="film-details__emoji-label" for="emoji-angry">
-                  <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
-                </label>
-              </div>
-            </div>
-          </section>
-        </div>
+        <div class="form-details__bottom-container"></div>
       </form>
     </section>`
   );
 };
 
-export default class MovieDetails extends AbstractSmartComponent {
+export default class MovieDetails extends AbstractComponent {
   constructor(movie) {
     super();
-
     this._movie = movie;
-
-    this._newComment = {
-      text: ``,
-      emoji: ``,
-      author: ``,
-      date: null,
-    };
-
-    this._movieDetailsCloseButtonClickHandler = null;
-
-    this._subscribeOnEvents();
   }
 
   getTemplate() {
-    return createMovieDetailsTemplate(this._movie, {
-      newComment: this._newComment,
-    });
-  }
-
-  recoveryListeners() {
-    this.setMovieDetailsCloseButtonClickHandler(this._movieDetailsCloseButtonClickHandler);
-    this._subscribeOnEvents();
-  }
-
-  rerender() {
-    super.rerender();
-  }
-
-  reset() {
-    this._newComment = {
-      text: ``,
-      emoji: ``,
-      author: ``,
-      date: null,
-    };
-
-    this.rerender();
+    return createMovieDetailsTemplate(this._movie);
   }
 
   setMovieDetailsCloseButtonClickHandler(handler) {
     this.getElement().querySelector(`.film-details__close-btn`)
       .addEventListener(`click`, handler);
-
-    this._movieDetailsCloseButtonClickHandler = handler;
   }
 
   setAddToWatchlistButtonClickHandler(handler) {
@@ -242,15 +137,5 @@ export default class MovieDetails extends AbstractSmartComponent {
   setAddToFavoritesButtonClickHandler(handler) {
     this.getElement().querySelector(`.film-details__control-label--favorite`)
       .addEventListener(`click`, handler);
-  }
-
-  _subscribeOnEvents() {
-    const element = this.getElement();
-
-    element.querySelector(`.film-details__emoji-list`)
-      .addEventListener(`change`, (evt) => {
-        this._newComment.emoji = evt.target.value;
-        this.rerender();
-      });
   }
 }

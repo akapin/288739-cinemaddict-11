@@ -42,6 +42,34 @@ export default class Movies {
     return true;
   }
 
+  getMovieComments(movieId) {
+    return this._movies.find((movie) => movie.id === movieId).comments;
+  }
+
+  addComment(movie, comment) {
+    let oldComments = this.getMovieComments(movie.id);
+    const newComments = [].concat(oldComments, comment);
+
+    this.updateMovie(movie.id, Object.assign({}, movie, {
+      comments: newComments,
+    }));
+  }
+
+  removeComment(movie, commentId) {
+    let oldComments = this.getMovieComments(movie.id);
+    const index = oldComments.findIndex((it) => it.id === commentId);
+
+    if (index === -1) {
+      return;
+    }
+
+    const newComments = [].concat(oldComments.slice(0, index), oldComments.slice(index + 1));
+
+    this.updateMovie(movie.id, Object.assign({}, movie, {
+      comments: newComments,
+    }));
+  }
+
   setFilterChangeHandler(handler) {
     this._filterChangeHandlers.push(handler);
   }
