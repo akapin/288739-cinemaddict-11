@@ -4,7 +4,7 @@ import ProfileComponent from "./components/profile.js";
 import FilterController from "./controllers/filter.js";
 import MoviesAmountComponent from "./components/movies-amount.js";
 import MoviesModel from "./models/movies.js";
-import {generateWatchedMoviesCount, generateMoviesAmount} from "./mock/movie.js";
+import {getWatchedMovies} from "./utils/filter.js";
 import {render} from "./utils/render.js";
 
 const AUTHORIZATION = `Basic ar283jdzsdw`;
@@ -16,11 +16,6 @@ const footerStatisticsElement = document.querySelector(`.footer__statistics`);
 const api = new API(AUTHORIZATION);
 const moviesModel = new MoviesModel();
 
-const watchedMoviesCount = generateWatchedMoviesCount();
-const moviesAmount = generateMoviesAmount();
-
-render(siteHeaderElement, new ProfileComponent(watchedMoviesCount));
-
 const filterController = new FilterController(siteMainElement, moviesModel);
 filterController.render();
 
@@ -29,7 +24,10 @@ const pageController = new PageController(siteMainElement, moviesModel);
 api.getMovies()
   .then((movies) => {
     moviesModel.setMovies(movies);
-    pageController.render();
-  });
+    const allMovies = moviesModel.getMoviesAll();
+    const watchedMoviesCount = getWatchedMovies(allMovies).length;
 
-render(footerStatisticsElement, new MoviesAmountComponent(moviesAmount));
+    pageController.render();
+    render(siteHeaderElement, new ProfileComponent(watchedMoviesCount));
+    render(footerStatisticsElement, new MoviesAmountComponent(allMovies.length));
+  });
