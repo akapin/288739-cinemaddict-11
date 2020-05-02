@@ -1,48 +1,33 @@
-import AbstractSmartComponent from "./abstract-smart-component.js";
+import AbstractComponent from "./abstract-component.js";
 
-export const SortType = {
-  DATE: `date`,
-  RATING: `rating`,
-  DEFAULT: `default`,
+const createSortTypeMarkup = (sortType) => {
+  const {name, active} = sortType;
+  return (
+    `<li><a href="#" data-sort-type="${name}" class="sort__button ${active ? `sort__button--active` : ``}">
+      Sort by ${name}
+    </a></li>`
+  );
 };
 
-const createSortingTemplate = (activeSortType) => {
+const createSortTypesTemplate = (sortTypes) => {
+  const sortTypesMarkup = sortTypes.map((it) => createSortTypeMarkup(it)).join(`\n`);
+
   return (
     `<ul class="sort">
-      <li><a href="#" data-sort-type="${SortType.DEFAULT}" class="sort__button ${activeSortType === SortType.DEFAULT ? `sort__button--active` : ``}">Sort by default</a></li>
-      <li><a href="#" data-sort-type="${SortType.DATE}" class="sort__button ${activeSortType === SortType.DATE ? `sort__button--active` : ``}">Sort by date</a></li>
-      <li><a href="#" data-sort-type="${SortType.RATING}" class="sort__button ${activeSortType === SortType.RATING ? `sort__button--active` : ``}">Sort by rating</a></li>
+      ${sortTypesMarkup}
     </ul>`
   );
 };
 
-export default class Sorting extends AbstractSmartComponent {
-  constructor() {
+export default class Sorting extends AbstractComponent {
+  constructor(sortTypes) {
     super();
 
-    this._currentSortType = SortType.DEFAULT;
-    this._sortTypeChangeHandler = null;
+    this._sortTypes = sortTypes;
   }
 
   getTemplate() {
-    return createSortingTemplate(this._currentSortType);
-  }
-
-  recoveryListeners() {
-    this.setSortTypeChangeHandler(this._sortTypeChangeHandler);
-  }
-
-  rerender() {
-    super.rerender();
-  }
-
-  getSortType() {
-    return this._currentSortType;
-  }
-
-  reset() {
-    this._currentSortType = SortType.DEFAULT;
-    this.rerender();
+    return createSortTypesTemplate(this._sortTypes);
   }
 
   setSortTypeChangeHandler(handler) {
@@ -53,18 +38,7 @@ export default class Sorting extends AbstractSmartComponent {
         return;
       }
 
-      const sortType = evt.target.dataset.sortType;
-
-      if (this._currentSortType === sortType) {
-        return;
-      }
-
-      this._currentSortType = sortType;
-
-      handler(this._currentSortType);
-      this.rerender();
+      handler(evt.target.dataset.sortType);
     });
-
-    this._sortTypeChangeHandler = handler;
   }
 }

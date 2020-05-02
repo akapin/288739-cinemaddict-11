@@ -2,6 +2,7 @@ import API from "./api.js";
 import PageController from "./controllers/page.js";
 import ProfileComponent from "./components/profile.js";
 import FilterController from "./controllers/filter.js";
+import SortController from "./controllers/sort.js";
 import MoviesAmountComponent from "./components/movies-amount.js";
 import MoviesModel from "./models/movies.js";
 import {getWatchedMovies} from "./utils/filter.js";
@@ -16,6 +17,9 @@ const moviesModel = new MoviesModel();
 
 const filterController = new FilterController(siteMainElement, moviesModel);
 filterController.render();
+
+const sortController = new SortController(siteMainElement, moviesModel);
+sortController.render();
 
 const pageController = new PageController(siteMainElement, moviesModel);
 
