@@ -21,11 +21,45 @@ export default class Movie {
     this.watchingDate = new Date(data[`user_details`][`watching_date`]);
   }
 
+  toRAW() {
+    return {
+      "id": this.id,
+      "comments": this.comments,
+      "film_info": {
+        "title": this.title,
+        "alternative_title": this.originTitle,
+        "total_rating": this.rating,
+        "poster": this.poster,
+        "age_rating": this.ageRating,
+        "director": this.director,
+        "writers": this.screenwriters,
+        "actors": this.actors,
+        "release": {
+          "date": this.date.toISOString(),
+          "release_country": this.country,
+        },
+        "runtime": this.duration,
+        "genre": this.genres,
+        "description": this.description,
+      },
+      "user_details": {
+        "watchlist": this.isInWatchlist,
+        "already_watched": this.isWatched,
+        "watching_date": this.watchingDate.toISOString(),
+        "favorite": this.isFavorite
+      }
+    };
+  }
+
   static parseMovie(data) {
     return new Movie(data);
   }
 
   static parseMovies(data) {
     return data.map(Movie.parseMovie);
+  }
+
+  static clone(data) {
+    return new Movie(data.toRAW());
   }
 }

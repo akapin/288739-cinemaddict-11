@@ -1,3 +1,4 @@
+import API from "../api.js";
 import BoardComponent from "../components/board.js";
 import MoviesComponent from "../components/movies.js";
 import ExtraInfoAboutMoviesComponent from "../components/extra-info-about-movies.js";
@@ -139,11 +140,21 @@ export default class PageController {
   }
 
   _onDataChange(movieController, oldData, newData) {
-    const isSuccess = this._moviesModel.updateMovie(oldData.id, newData);
+    this._updateMovie(oldData.id, newData)
+      .then((movieModel) => {
+        const isSuccess = this._moviesModel.updateMovie(oldData.id, movieModel);
 
-    if (isSuccess) {
-      movieController.render(newData);
-    }
+        if (isSuccess) {
+          this._sortingComponent.reset();
+          this._updateMovies(this._showingMoviesCount);
+          movieController.render(movieModel, movieController.getMode());
+        }
+      });
+  }
+
+  _updateMovie(id, data) {
+    const api = new API();
+    return api.updateMovie(id, data);
   }
 
   _onViewChange() {
