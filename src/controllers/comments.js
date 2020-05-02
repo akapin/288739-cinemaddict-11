@@ -1,3 +1,4 @@
+import API from "../api.js";
 import CommentsSectionComponent from "../components/movie-comments-section.js";
 import NewCommentController from "../controllers/new-comment.js";
 import CommentController from "./comment.js";
@@ -18,17 +19,18 @@ export default class CommentsController {
   }
 
   render() {
-    const comments = this._moviesModel.getMovieComments(this._movie.id);
+    this._getComments(this._movie.id)
+      .then((comments) => {
+        this._commentsSectionComponent = new CommentsSectionComponent(comments.length);
+        render(this._container, this._commentsSectionComponent);
 
-    this._commentsSectionComponent = new CommentsSectionComponent(comments.length);
-    render(this._container, this._commentsSectionComponent);
+        const commentControllers = this._renderComments(comments);
+        this._showedCommentControllers = this._showedCommentControllers.concat(commentControllers);
 
-    const commentControllers = this._renderComments(comments);
-    this._showedCommentControllers = this._showedCommentControllers.concat(commentControllers);
-
-    const commentsSectionElement = this._commentsSectionComponent.getElement();
-    this._newCommentController = new NewCommentController(commentsSectionElement, this._onDataChange);
-    this._newCommentController.render();
+        const commentsSectionElement = this._commentsSectionComponent.getElement();
+        this._newCommentController = new NewCommentController(commentsSectionElement, this._onDataChange);
+        this._newCommentController.render();
+      });
   }
 
   destroy() {
@@ -36,6 +38,11 @@ export default class CommentsController {
     this._showedCommentControllers = [];
     remove(this._commentsSectionComponent);
     this._newCommentController.destroy();
+  }
+
+  _getComments(movieId) {
+    const api = new API();
+    return api.getComments(movieId);
   }
 
   _renderComments(comments) {

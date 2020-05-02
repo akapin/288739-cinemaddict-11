@@ -7,13 +7,11 @@ import MoviesModel from "./models/movies.js";
 import {getWatchedMovies} from "./utils/filter.js";
 import {render} from "./utils/render.js";
 
-const AUTHORIZATION = `Basic ar283jdzsdw`;
-
 const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
 const footerStatisticsElement = document.querySelector(`.footer__statistics`);
 
-const api = new API(AUTHORIZATION);
+const api = new API();
 const moviesModel = new MoviesModel();
 
 const filterController = new FilterController(siteMainElement, moviesModel);
