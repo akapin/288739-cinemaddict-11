@@ -7,27 +7,29 @@ import MoviesModel from "./models/movies.js";
 import {generateWatchedMoviesCount, generateMoviesAmount} from "./mock/movie.js";
 import {render} from "./utils/render.js";
 
+const AUTHORIZATION = `Basic ar283jdzsdw`;
+
 const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
 const footerStatisticsElement = document.querySelector(`.footer__statistics`);
 
-const api = new API();
+const api = new API(AUTHORIZATION);
 const moviesModel = new MoviesModel();
 
 const watchedMoviesCount = generateWatchedMoviesCount();
 const moviesAmount = generateMoviesAmount();
 
 render(siteHeaderElement, new ProfileComponent(watchedMoviesCount));
+
 const filterController = new FilterController(siteMainElement, moviesModel);
 filterController.render();
 
 const pageController = new PageController(siteMainElement, moviesModel);
-
-
-render(footerStatisticsElement, new MoviesAmountComponent(moviesAmount));
 
 api.getMovies()
   .then((movies) => {
     moviesModel.setMovies(movies);
     pageController.render();
   });
+
+render(footerStatisticsElement, new MoviesAmountComponent(moviesAmount));
