@@ -2,6 +2,7 @@ import API from "../api.js";
 import CommentsSectionComponent from "../components/movie-comments-section.js";
 import NewCommentController from "../controllers/new-comment.js";
 import CommentController from "./comment.js";
+import ErrorComponent from "../components/error.js";
 import {render, remove} from "../utils/render.js";
 
 export default class CommentsController {
@@ -30,6 +31,10 @@ export default class CommentsController {
         const commentsSectionElement = this._commentsSectionComponent.getElement();
         this._newCommentController = new NewCommentController(commentsSectionElement, this._onDataChange);
         this._newCommentController.render();
+      })
+      .catch(() => {
+        const errorComponent = new ErrorComponent(`При загрузке комментариев произошла ошибка`);
+        render(this._container, errorComponent);
       });
   }
 
