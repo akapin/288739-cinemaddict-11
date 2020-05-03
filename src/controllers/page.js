@@ -53,7 +53,11 @@ export default class PageController {
     const boardElement = this._boardComponent.getElement();
     render(boardElement, this._moviesComponent);
     this._showingMoviesCount = SHOWING_MOVIES_COUNT_BY_BUTTON;
-    this._renderMovies(movies.slice(0, this._showingMoviesCount));
+
+    const moviesContainerElement = this._moviesComponent.getElement().querySelector(`.films-list__container`);
+    const showedMovies = movies.slice(0, this._showingMoviesCount);
+    this._renderMovies(moviesContainerElement, showedMovies, this._showedMovieControllers);
+
     this._renderShowMoreButton();
     this._renderExtraMovieListSection();
     render(this._container, this._boardComponent);
@@ -64,11 +68,10 @@ export default class PageController {
     this._showedMovieControllers = [];
   }
 
-  _renderMovies(movies) {
-    const moviesContainerElement = this._moviesComponent.getElement().querySelector(`.films-list__container`);
-    const newMovies = renderMovies(moviesContainerElement, this._moviesModel, movies, this._onDataChange, this._onViewChange, this._api);
-    this._showedMovieControllers = this._showedMovieControllers.concat(newMovies);
-    this._showingMoviesCount = this._showedMovieControllers.length;
+  _renderMovies(container, movies, showedMovieControllers) {
+    const newMovies = renderMovies(container, this._moviesModel, movies, this._onDataChange, this._onViewChange, this._api);
+    showedMovieControllers.push(...newMovies);
+    this._showingMoviesCount = showedMovieControllers.length;
   }
 
   _renderExtraMovieListSection() {
@@ -84,11 +87,11 @@ export default class PageController {
 
   _renderExtraMovieList(containerElement, title, movies, showingMoviesCount) {
     const extraInfoAboutMoviesComponent = new ExtraInfoAboutMoviesComponent(title);
-    const extraInfoAboutMoviesElement = extraInfoAboutMoviesComponent.getElement();
-    const moviesContainerElement = extraInfoAboutMoviesElement.querySelector(`.films-list__container`);
 
-    const newMovies = renderMovies(moviesContainerElement, this._moviesModel, movies.slice(0, showingMoviesCount), this._onDataChange, this._onViewChange, this._api);
-    this._showedMovieExtraControllers = this._showedMovieExtraControllers.concat(newMovies);
+    const moviesContainerElement = extraInfoAboutMoviesComponent.getElement().querySelector(`.films-list__container`);
+    const showedMovies = movies.slice(0, showingMoviesCount);
+    this._renderMovies(moviesContainerElement, showedMovies, this._showedMovieExtraControllers);
+
     render(containerElement, extraInfoAboutMoviesComponent);
   }
 
@@ -108,7 +111,9 @@ export default class PageController {
 
   _updateMovies(count) {
     this._removeMovies();
-    this._renderMovies(this._moviesModel.getMovies().slice(0, count));
+    const moviesContainerElement = this._moviesComponent.getElement().querySelector(`.films-list__container`);
+    const showedMovies = this._moviesModel.getMovies().slice(0, count);
+    this._renderMovies(moviesContainerElement, showedMovies, this._showedMovieControllers);
     this._renderShowMoreButton();
   }
 
@@ -131,11 +136,12 @@ export default class PageController {
 
   _onShowMoreButtonClick() {
     const moviesContainerElement = this._moviesComponent.getElement().querySelector(`.films-list__container`);
+    const movies = this._moviesModel.getMovies();
     const prevMoviesCount = this._showingMoviesCount;
     this._showingMoviesCount = this._showingMoviesCount + SHOWING_MOVIES_COUNT_BY_BUTTON;
-    const movies = this._moviesModel.getMovies();
-    const newMovies = renderMovies(moviesContainerElement, this._moviesModel, movies.slice(prevMoviesCount, this._showingMoviesCount), this._onDataChange, this._onViewChange, this._api);
-    this._showedMovieControllers = this._showedMovieControllers.concat(newMovies);
+    const showedMovies = movies.slice(prevMoviesCount, this._showingMoviesCount);
+
+    this._renderMovies(moviesContainerElement, showedMovies, this._showedMovieControllers);
 
     if (this._showingMoviesCount >= movies.length) {
       remove(this._showMoreButtonComponent);
