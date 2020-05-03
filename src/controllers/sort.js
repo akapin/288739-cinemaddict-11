@@ -12,8 +12,10 @@ export default class SortController {
 
     this._onDataChange = this._onDataChange.bind(this);
     this._onSortChange = this._onSortChange.bind(this);
+    this._onFilterChange = this._onFilterChange.bind(this);
 
     this._moviesModel.setDataChangeHandler(this._onDataChange);
+    this._moviesModel.setFilterChangeHandler(this._onFilterChange);
   }
 
   render() {
@@ -43,6 +45,12 @@ export default class SortController {
   }
 
   _onDataChange() {
+    this.render();
+  }
+
+  _onFilterChange() {
+    this._moviesModel.setSortType(SortType.DEFAULT);
+    this._activeSortType = SortType.DEFAULT;
     this.render();
   }
 }
