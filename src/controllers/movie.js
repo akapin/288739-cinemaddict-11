@@ -3,8 +3,9 @@ import MovieDetailsComponent from "../components/movie-details.js";
 import CommentsController from "./comments.js";
 import {render, append, remove, replace} from "../utils/render.js";
 import {Key} from "../const.js";
+import MovieModel from "../models/movie.js";
 
-const Mode = {
+export const Mode = {
   DEFAULT: `default`,
   POPUP: `popup`,
 };
@@ -24,8 +25,11 @@ export default class MovieController {
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
   }
 
-  render(movie) {
+  render(movie, mode = Mode.DEFAULT) {
     const oldMovieComponent = this._movieComponent;
+    const oldMovieDetailsComponent = this._movieDetailsComponent;
+    this._mode = mode;
+
     this._movieComponent = new MovieComponent(movie);
     this._movieDetailsComponent = new MovieDetailsComponent(movie);
     this._movie = movie;
@@ -42,23 +46,23 @@ export default class MovieController {
 
     this._movieComponent.setAddToWatchlistButtonClickHandler((evt) => {
       evt.preventDefault();
-      this._onDataChange(this, movie, Object.assign({}, movie, {
-        isInWatchlist: !movie.isInWatchlist,
-      }));
+      const newMovie = MovieModel.clone(movie);
+      newMovie.isInWatchlist = !newMovie.isInWatchlist;
+      this._onDataChange(this, movie, newMovie);
     });
 
     this._movieComponent.setAlreadyWatchedButtonClickHandler((evt) => {
       evt.preventDefault();
-      this._onDataChange(this, movie, Object.assign({}, movie, {
-        isWatched: !movie.isWatched,
-      }));
+      const newMovie = MovieModel.clone(movie);
+      newMovie.isWatched = !newMovie.isWatched;
+      this._onDataChange(this, movie, newMovie);
     });
 
     this._movieComponent.setAddToFavoritesButtonClickHandler((evt) => {
       evt.preventDefault();
-      this._onDataChange(this, movie, Object.assign({}, movie, {
-        isFavorite: !movie.isFavorite,
-      }));
+      const newMovie = MovieModel.clone(movie);
+      newMovie.isFavorite = !newMovie.isFavorite;
+      this._onDataChange(this, movie, newMovie);
     });
 
     this._movieDetailsComponent.setMovieDetailsCloseButtonClickHandler(() => {
@@ -66,28 +70,44 @@ export default class MovieController {
     });
 
     this._movieDetailsComponent.setAddToWatchlistButtonClickHandler(() => {
-      this._onDataChange(this, movie, Object.assign({}, movie, {
-        isInWatchlist: !movie.isInWatchlist,
-      }));
+      const newMovie = MovieModel.clone(movie);
+      newMovie.isInWatchlist = !newMovie.isInWatchlist;
+      this._onDataChange(this, movie, newMovie);
     });
 
     this._movieDetailsComponent.setAlreadyWatchedButtonClickHandler(() => {
-      this._onDataChange(this, movie, Object.assign({}, movie, {
-        isWatched: !movie.isWatched,
-      }));
+      const newMovie = MovieModel.clone(movie);
+      newMovie.isWatched = !newMovie.isWatched;
+      this._onDataChange(this, movie, newMovie);
     });
 
     this._movieDetailsComponent.setAddToFavoritesButtonClickHandler(() => {
-      this._onDataChange(this, movie, Object.assign({}, movie, {
-        isFavorite: !movie.isFavorite,
-      }));
+      const newMovie = MovieModel.clone(movie);
+      newMovie.isFavorite = !newMovie.isFavorite;
+      this._onDataChange(this, movie, newMovie);
     });
 
-    if (oldMovieComponent) {
-      replace(this._movieComponent, oldMovieComponent);
-    } else {
-      render(this._container, this._movieComponent);
+    switch (mode) {
+      case Mode.DEFAULT:
+        if (oldMovieDetailsComponent && oldMovieComponent) {
+          replace(this._movieComponent, oldMovieComponent);
+          replace(this._movieDetailsComponent, oldMovieDetailsComponent);
+        } else {
+          render(this._container, this._movieComponent);
+        }
+        break;
+      case Mode.POPUP:
+        if (oldMovieDetailsComponent && oldMovieComponent) {
+          remove(oldMovieComponent);
+          remove(oldMovieDetailsComponent);
+        }
+        this._openMovieDetailsPopup();
+        break;
     }
+  }
+
+  getMode() {
+    return this._mode;
   }
 
   setDefaultView() {
