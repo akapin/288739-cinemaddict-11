@@ -1,4 +1,3 @@
-import API from "../api.js";
 import BoardComponent from "../components/board.js";
 import MoviesComponent from "../components/movies.js";
 import ExtraInfoAboutMoviesComponent from "../components/extra-info-about-movies.js";
@@ -12,18 +11,19 @@ const SHOWING_MOVIES_COUNT_BY_BUTTON = 5;
 const SHOWING_TOP_RATED_MOVIES_COUNT = 2;
 const SHOWING_MOST_COMMENTED_MOVIES_COUNT = 2;
 
-const renderMovies = (moviesContainerElement, moviesModel, movies, onDataChange, onViewChange) => {
+const renderMovies = (moviesContainerElement, moviesModel, movies, onDataChange, onViewChange, api) => {
   return movies.map((movie) => {
-    const movieController = new MovieController(moviesContainerElement, moviesModel, onDataChange, onViewChange);
+    const movieController = new MovieController(moviesContainerElement, moviesModel, onDataChange, onViewChange, api);
     movieController.render(movie);
     return movieController;
   });
 };
 
 export default class PageController {
-  constructor(container, moviesModel) {
+  constructor(container, moviesModel, api) {
     this._container = container;
     this._moviesModel = moviesModel;
+    this._api = api;
 
     this._showedMovieControllers = [];
     this._showedMovieExtraControllers = [];
@@ -66,7 +66,7 @@ export default class PageController {
 
   _renderMovies(movies) {
     const moviesContainerElement = this._moviesComponent.getElement().querySelector(`.films-list__container`);
-    const newMovies = renderMovies(moviesContainerElement, this._moviesModel, movies, this._onDataChange, this._onViewChange);
+    const newMovies = renderMovies(moviesContainerElement, this._moviesModel, movies, this._onDataChange, this._onViewChange, this._api);
     this._showedMovieControllers = this._showedMovieControllers.concat(newMovies);
     this._showingMoviesCount = this._showedMovieControllers.length;
   }
@@ -87,7 +87,7 @@ export default class PageController {
     const extraInfoAboutMoviesElement = extraInfoAboutMoviesComponent.getElement();
     const moviesContainerElement = extraInfoAboutMoviesElement.querySelector(`.films-list__container`);
 
-    const newMovies = renderMovies(moviesContainerElement, this._moviesModel, movies.slice(0, showingMoviesCount), this._onDataChange, this._onViewChange);
+    const newMovies = renderMovies(moviesContainerElement, this._moviesModel, movies.slice(0, showingMoviesCount), this._onDataChange, this._onViewChange, this._api);
     this._showedMovieExtraControllers = this._showedMovieExtraControllers.concat(newMovies);
     render(containerElement, extraInfoAboutMoviesComponent);
   }
@@ -113,7 +113,7 @@ export default class PageController {
   }
 
   _onDataChange(movieController, oldData, newData) {
-    this._updateMovie(oldData.id, newData)
+    this._api.updateMovie(oldData.id, newData)
       .then((movieModel) => {
         const isSuccess = this._moviesModel.updateMovie(oldData.id, movieModel);
 
@@ -122,11 +122,6 @@ export default class PageController {
           movieController.render(movieModel, movieController.getMode());
         }
       });
-  }
-
-  _updateMovie(id, data) {
-    const api = new API();
-    return api.updateMovie(id, data);
   }
 
   _onViewChange() {
@@ -139,7 +134,7 @@ export default class PageController {
     const prevMoviesCount = this._showingMoviesCount;
     this._showingMoviesCount = this._showingMoviesCount + SHOWING_MOVIES_COUNT_BY_BUTTON;
     const movies = this._moviesModel.getMovies();
-    const newMovies = renderMovies(moviesContainerElement, this._moviesModel, movies.slice(prevMoviesCount, this._showingMoviesCount), this._onDataChange, this._onViewChange);
+    const newMovies = renderMovies(moviesContainerElement, this._moviesModel, movies.slice(prevMoviesCount, this._showingMoviesCount), this._onDataChange, this._onViewChange, this._api);
     this._showedMovieControllers = this._showedMovieControllers.concat(newMovies);
 
     if (this._showingMoviesCount >= movies.length) {
