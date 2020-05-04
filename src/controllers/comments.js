@@ -60,11 +60,11 @@ export default class CommentsController {
 
   _onDataChange(oldData, newData) {
     if (!oldData) {
-      this._moviesModel.addComment(this._movie, newData);
-      this._updateComments();
+      this._api.createComment(this._movie.id, newData)
+        .then(() => this._updateComments());
     } else if (!newData) {
-      this._moviesModel.removeComment(this._movie, oldData.id);
-      this._updateComments();
+      this._api.deleteComment(oldData.id)
+        .then(() => this._updateComments());
     }
   }
 }
