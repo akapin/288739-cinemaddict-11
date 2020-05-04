@@ -58,13 +58,20 @@ export default class CommentsController {
     this.render();
   }
 
-  _onDataChange(oldData, newData) {
+  _onDataChange(controller, oldData, newData) {
     if (!oldData) {
+      controller.hideError();
+      controller.disableForm();
       this._api.createComment(this._movie.id, newData)
-        .then(() => this._updateComments());
+        .then(() => this._updateComments())
+        .catch(() => controller.showError())
+        .finally(() => controller.enableForm());
     } else if (!newData) {
+      controller.disableDeleteButton();
       this._api.deleteComment(oldData.id)
-        .then(() => this._updateComments());
+        .then(() => this._updateComments())
+        .catch(() => controller.shake())
+        .finally(() => controller.enableDeleteButton());
     }
   }
 }
