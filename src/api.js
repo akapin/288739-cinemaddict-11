@@ -8,9 +8,6 @@ const Method = {
   DELETE: `DELETE`
 };
 
-const AUTHORIZATION = `Basic ar283jdzsdw`;
-const END_POINT = `https://11.ecmascript.pages.academy/cinemaddict`;
-
 const checkStatus = (response) => {
   if (response.status >= 200 && response.status < 300) {
     return response;
@@ -20,21 +17,15 @@ const checkStatus = (response) => {
 };
 
 const API = class {
-  constructor() {
-    this._endPoint = END_POINT;
-    this._authorization = AUTHORIZATION;
+  constructor(endPoint, authorization) {
+    this._endPoint = endPoint;
+    this._authorization = authorization;
   }
 
   getMovies() {
     return this._load({url: `movies`})
       .then((response) => response.json())
       .then(Movie.parseMovies);
-  }
-
-  getComments(movieId) {
-    return this._load({url: `comments/${movieId}`})
-      .then((response) => response.json())
-      .then(Comment.parseComments);
   }
 
   updateMovie(id, data) {
@@ -46,6 +37,30 @@ const API = class {
     })
       .then((response) => response.json())
       .then(Movie.parseMovie);
+  }
+
+  getComments(movieId) {
+    return this._load({url: `comments/${movieId}`})
+      .then((response) => response.json())
+      .then(Comment.parseComments);
+  }
+
+  createComment(movieId, data) {
+    return this._load({
+      url: `comments/${movieId}`,
+      method: Method.POST,
+      body: JSON.stringify(data.toRAW()),
+      headers: new Headers({"Content-Type": `application/json`}),
+    })
+      .then((response) => response.json())
+      .then((json) => Comment.parseComments(json.comments));
+  }
+
+  deleteComment(id) {
+    return this._load({
+      url: `comments/${id}`,
+      method: Method.DELETE,
+    });
   }
 
   _load({url, method = Method.GET, body = null, headers = new Headers()}) {

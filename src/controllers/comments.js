@@ -1,4 +1,3 @@
-import API from "../api.js";
 import CommentsSectionComponent from "../components/movie-comments-section.js";
 import NewCommentController from "../controllers/new-comment.js";
 import CommentController from "./comment.js";
@@ -6,11 +5,11 @@ import ErrorComponent from "../components/error.js";
 import {render, remove} from "../utils/render.js";
 
 export default class CommentsController {
-  constructor(container, moviesModel, movie) {
+  constructor(container, moviesModel, movie, api) {
     this._container = container;
-
     this._moviesModel = moviesModel;
     this._movie = movie;
+    this._api = api;
 
     this._showedCommentControllers = [];
     this._commentsSectionComponent = null;
@@ -20,7 +19,7 @@ export default class CommentsController {
   }
 
   render() {
-    this._getComments(this._movie.id)
+    this._api.getComments(this._movie.id)
       .then((comments) => {
         this._commentsSectionComponent = new CommentsSectionComponent(comments.length);
         render(this._container, this._commentsSectionComponent);
@@ -45,11 +44,6 @@ export default class CommentsController {
     this._newCommentController.destroy();
   }
 
-  _getComments(movieId) {
-    const api = new API();
-    return api.getComments(movieId);
-  }
-
   _renderComments(comments) {
     const commentListContainerElement = this._commentsSectionComponent.getElement().querySelector(`.film-details__comments-list`);
     return comments.map((comment) => {
@@ -64,13 +58,20 @@ export default class CommentsController {
     this.render();
   }
 
-  _onDataChange(oldData, newData) {
+  _onDataChange(controller, oldData, newData) {
     if (!oldData) {
-      this._moviesModel.addComment(this._movie, newData);
-      this._updateComments();
+      controller.hideError();
+      controller.disableForm();
+      this._api.createComment(this._movie.id, newData)
+        .then(() => this._updateComments())
+        .catch(() => controller.showError())
+        .finally(() => controller.enableForm());
     } else if (!newData) {
-      this._moviesModel.removeComment(this._movie, oldData.id);
-      this._updateComments();
+      controller.disableDeleteButton();
+      this._api.deleteComment(oldData.id)
+        .then(() => this._updateComments())
+        .catch(() => controller.shake())
+        .finally(() => controller.enableDeleteButton());
     }
   }
 }
