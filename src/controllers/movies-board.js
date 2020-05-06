@@ -39,10 +39,10 @@ export default class MoviesBoardController {
   }
 
   hide() {
-    this._container.hide();
+    this._moviesBoardComponent.hide();
   }
 
   show() {
-    this._container.show();
+    this._moviesBoardComponent.show();
   }
 }

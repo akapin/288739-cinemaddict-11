@@ -5,9 +5,10 @@ import {FilterType} from "../const.js";
 import {getMoviesByFilter} from "../utils/filter.js";
 
 export default class FiltersController {
-  constructor(container, moviesModel) {
+  constructor(container, moviesModel, contentControllers) {
     this._container = container;
     this._moviesModel = moviesModel;
+    this._contentControllers = contentControllers;
 
     this._filtersComponent = null;
 
@@ -57,6 +58,9 @@ export default class FiltersController {
   }
 
   _onFilterChange(filterType) {
+    this._contentControllers.statisticsController.hide();
+    this._contentControllers.sortController.show();
+    this._contentControllers.moviesBoardController.show();
     this._moviesModel.setFilter(filterType);
     this._activeFilterType = filterType;
     this._updateFilters();

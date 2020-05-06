@@ -12,4 +12,14 @@ export default class Navigation extends AbstractComponent {
   getTemplate() {
     return createNavigationTemplate();
   }
+
+  setStatsLinkClickHandler(handler) {
+    this.getElement().addEventListener(`click`, (evt) => {
+      evt.preventDefault();
+
+      if (evt.target.tagName === `A` && evt.target.href.includes(`#stats`)) {
+        handler();
+      }
+    });
+  }
 }
