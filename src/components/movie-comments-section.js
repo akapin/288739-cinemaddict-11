@@ -1,6 +1,6 @@
 import AbstractComponent from "./abstract-component.js";
 
-const createMovieCommentsSectionTemplate = (commentsCount) => {
+const createCommentsSectionTemplate = (commentsCount) => {
   return (
     `<section class="film-details__comments-wrap">
       <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${commentsCount}</span></h3>
@@ -16,6 +16,6 @@ export default class CommentsSection extends AbstractComponent {
   }
 
   getTemplate() {
-    return createMovieCommentsSectionTemplate(this._commentsCount);
+    return createCommentsSectionTemplate(this._commentsCount);
   }
 }

@@ -6,8 +6,9 @@ const SHAKE_ANIMATION_TIMEOUT = 600;
 export default class CommentController {
   constructor(container, onDataChange) {
     this._container = container;
-    this._commentComponent = null;
     this._onDataChange = onDataChange;
+
+    this._commentComponent = null;
   }
 
   render(comment) {

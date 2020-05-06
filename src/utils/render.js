@@ -13,13 +13,13 @@ export const createElement = (template) => {
 export const render = (container, component, place = RenderPosition.BEFOREEND) => {
   switch (place) {
     case RenderPosition.AFTERBEGIN:
-      append(container, component);
+      container.prepend(component.getElement());
       break;
     case RenderPosition.BEFOREEND:
-      append(container, component);
+      container.append(component.getElement());
       break;
     default:
-      append(container, component);
+      container.append(component.getElement());
       break;
   }
 };
@@ -34,10 +34,6 @@ export const replace = (newComponent, oldComponent) => {
   if (isExistElements && parentElement.contains(oldElement)) {
     parentElement.replaceChild(newElement, oldElement);
   }
-};
-
-export const append = (parent, component) => {
-  parent.appendChild(component.getElement());
 };
 
 export const remove = (component) => {
