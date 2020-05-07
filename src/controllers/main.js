@@ -35,7 +35,6 @@ export default class MainController {
     sortController.render();
 
     statisticsController.render();
-    statisticsController.hide();
 
     const loadingComponent = new LoadingComponent();
     render(this._mainComponent.getElement(), loadingComponent);

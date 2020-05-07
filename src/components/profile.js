@@ -1,15 +1,6 @@
 import AbstractComponent from "./abstract-component.js";
+import {getUserRank} from "../utils/common.js";
 
-const getUserRank = (watchedMoviesCount) => {
-  if (watchedMoviesCount >= 1 && watchedMoviesCount <= 10) {
-    return `Novice`;
-  } else if (watchedMoviesCount >= 11 && watchedMoviesCount <= 20) {
-    return `Fan`;
-  } else if (watchedMoviesCount >= 21) {
-    return `Movie Buff`;
-  }
-  return ``;
-};
 
 const createProfileTemplate = (watchedMoviesCount) => {
   const userRank = getUserRank(watchedMoviesCount);
