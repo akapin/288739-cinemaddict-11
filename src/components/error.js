@@ -1,12 +1,8 @@
 import AbstractComponent from "./abstract-component.js";
 
-const createErrorTemplate = (errorText) => {
-  return (
-    `${errorText}`
-  );
-};
+const createErrorTemplate = (errorText) => `${errorText}`;
 
-export default class Loading extends AbstractComponent {
+export default class Error extends AbstractComponent {
   constructor(errorText) {
     super();
     this._errorText = errorText;

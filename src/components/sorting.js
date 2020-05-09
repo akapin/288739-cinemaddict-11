@@ -9,7 +9,7 @@ const createSortTypeMarkup = (sortType) => {
   );
 };
 
-const createSortTypesTemplate = (sortTypes) => {
+const createSortingTemplate = (sortTypes) => {
   const sortTypesMarkup = sortTypes.map((it) => createSortTypeMarkup(it)).join(`\n`);
 
   return (
@@ -27,7 +27,7 @@ export default class Sorting extends AbstractComponent {
   }
 
   getTemplate() {
-    return createSortTypesTemplate(this._sortTypes);
+    return createSortingTemplate(this._sortTypes);
   }
 
   setSortTypeChangeHandler(handler) {

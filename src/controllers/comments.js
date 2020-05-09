@@ -1,6 +1,6 @@
-import CommentsSectionComponent from "../components/movie-comments-section.js";
-import NewCommentController from "../controllers/new-comment.js";
+import NewCommentController from "./new-comment.js";
 import CommentController from "./comment.js";
+import CommentsSectionComponent from "../components/movie-comments-section.js";
 import ErrorComponent from "../components/error.js";
 import {render, remove} from "../utils/render.js";
 
@@ -40,8 +40,12 @@ export default class CommentsController {
   destroy() {
     this._showedCommentControllers.forEach((commentController) => commentController.destroy());
     this._showedCommentControllers = [];
-    remove(this._commentsSectionComponent);
-    this._newCommentController.destroy();
+    if (this._commentsSectionComponent) {
+      remove(this._commentsSectionComponent);
+    }
+    if (this._newCommentController) {
+      this._newCommentController.destroy();
+    }
   }
 
   _renderComments(comments) {

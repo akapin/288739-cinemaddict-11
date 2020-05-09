@@ -1,9 +1,9 @@
+import CommentsController from "./comments.js";
 import MovieComponent from "../components/movie.js";
 import MovieDetailsComponent from "../components/movie-details.js";
-import CommentsController from "./comments.js";
-import {render, append, remove, replace} from "../utils/render.js";
-import {Key} from "../const.js";
 import MovieModel from "../models/movie.js";
+import {render, remove, replace} from "../utils/render.js";
+import {Key} from "../const.js";
 
 export const Mode = {
   DEFAULT: `default`,
@@ -134,7 +134,7 @@ export default class MovieController {
     this._onViewChange();
     const bodyElement = document.querySelector(`body`);
     bodyElement.classList.add(`hide-overflow`);
-    append(bodyElement, this._movieDetailsComponent);
+    bodyElement.append(this._movieDetailsComponent.getElement());
     this._renderMovieCommentsSection();
     document.addEventListener(`keydown`, this._onEscKeyDown);
     this._movieDetailsComponent.setMovieDetailsCloseButtonClickHandler(() => {
