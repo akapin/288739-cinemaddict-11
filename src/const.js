@@ -16,3 +16,11 @@ export const Key = {
   ESCAPE: `Escape`,
   ENTER: `Enter`
 };
+
+export const DatePeriod = {
+  ALL: `all-time`,
+  TODAY: `today`,
+  WEEK: `week`,
+  MONTH: `month`,
+  YEAR: `year`,
+};

@@ -2,8 +2,17 @@ import AbstractSmartComponent from "./abstract-smart-component.js";
 import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import {getUserRank, getDurationHours, getDurationMinutes} from "../utils/common.js";
+import {DatePeriod} from "../const.js";
+import moment from "moment";
 
 const BAR_HEIGHT = 50;
+
+const getMoviesByWatchingDate = (movies, dateFrom) => {
+  if (!dateFrom) {
+    return movies;
+  }
+  return movies.filter((movie) => movie.watchingDate >= dateFrom);
+};
 
 const calcGenreStats = (movies) => {
   const genreStats = movies.reduce((acc, obj) => {
@@ -86,9 +95,8 @@ const renderChart = (statisticCtx, movies) => {
   });
 };
 
-const createStatisticsTemplate = (movies) => {
+const createStatisticsTemplate = (movies, datePeriod, userRank) => {
   const moviesCount = movies.length;
-  const userRank = getUserRank(moviesCount);
 
   const totalDuration = movies.reduce((acc, it) => acc + it.duration, 0);
   const totalDurationHours = getDurationHours(totalDuration);
@@ -108,19 +116,19 @@ const createStatisticsTemplate = (movies) => {
       <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
         <p class="statistic__filters-description">Show stats:</p>
 
-        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-all-time" value="all-time" checked>
+        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-all-time" value="all-time" ${datePeriod === DatePeriod.ALL ? `checked` : ``}>
         <label for="statistic-all-time" class="statistic__filters-label">All time</label>
 
-        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-today" value="today">
+        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-today" value="today" ${datePeriod === DatePeriod.TODAY ? `checked` : ``}>
         <label for="statistic-today" class="statistic__filters-label">Today</label>
 
-        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-week" value="week">
+        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-week" value="week" ${datePeriod === DatePeriod.WEEK ? `checked` : ``}>
         <label for="statistic-week" class="statistic__filters-label">Week</label>
 
-        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-month" value="month">
+        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-month" value="month" ${datePeriod === DatePeriod.MONTH ? `checked` : ``}>
         <label for="statistic-month" class="statistic__filters-label">Month</label>
 
-        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-year" value="year">
+        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-year" value="year" ${datePeriod === DatePeriod.YEAR ? `checked` : ``}>
         <label for="statistic-year" class="statistic__filters-label">Year</label>
       </form>
 
@@ -150,33 +158,76 @@ export default class Statistics extends AbstractSmartComponent {
   constructor(movies) {
     super();
 
-    this._movies = movies;
+    this._allMovies = movies;
+    this._filteredMovies = this._allMovies;
+    this._userRank = getUserRank(this._allMovies.length);
+    this._currentDatePeriod = DatePeriod.ALL;
+
     this._chart = null;
-    this._renderChart();
+    this._renderChart(this._filteredMovies);
+
+    this.datePeriodChangeHandler = null;
+    this._onDatePeriodChange = this._onDatePeriodChange.bind(this);
+    this.setDatePeriodChangeHandler(this._onDatePeriodChange);
   }
 
   getTemplate() {
-    return createStatisticsTemplate(this._movies);
+    return createStatisticsTemplate(this._filteredMovies, this._currentDatePeriod, this._userRank);
   }
 
   show() {
     super.show();
-    this.rerender(this._movies);
+    this.rerender();
   }
 
-  recoveryListeners() {}
+  recoveryListeners() {
+    this.setDatePeriodChangeHandler(this.datePeriodChangeHandler);
+  }
 
-  rerender(movies) {
-    this._movies = movies;
+  rerender() {
     super.rerender();
-    this._renderChart();
+    this._renderChart(this._filteredMovies);
   }
 
-  _renderChart() {
+  setDatePeriodChangeHandler(handler) {
+    this.getElement().querySelector(`.statistic__filters`).addEventListener(`change`, (evt) => {
+      handler(evt.target.value);
+    });
+
+    this.datePeriodChangeHandler = handler;
+  }
+
+  _onDatePeriodChange(period) {
+    this._currentDatePeriod = period;
+    let dateFrom = null;
+
+    switch (period) {
+      case `today`:
+        dateFrom = moment().startOf(`day`).toDate();
+        break;
+      case `week`:
+        dateFrom = moment().startOf(`isoWeek`).toDate();
+        break;
+      case `month`:
+        dateFrom = moment().startOf(`month`).toDate();
+        break;
+      case `year`:
+        dateFrom = moment().startOf(`year`).toDate();
+        break;
+      default:
+        dateFrom = null;
+        break;
+    }
+
+    this._filteredMovies = getMoviesByWatchingDate(this._allMovies, dateFrom);
+    this.rerender();
+  }
+
+  _renderChart(movies) {
     const element = this.getElement();
     const statisticCtx = element.querySelector(`.statistic__chart`);
     this._resetChart();
-    this._chart = renderChart(statisticCtx, this._movies);
+    this._chart = renderChart(statisticCtx, movies);
   }
 
   _resetChart() {
