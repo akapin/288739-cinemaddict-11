@@ -17,3 +17,13 @@ const bodyElement = document.querySelector(`body`);
 
 const pageController = new PageController(bodyElement, apiWithProvider);
 pageController.render();
+
+window.addEventListener(`online`, () => {
+  document.title = document.title.replace(` [offline]`, ``);
+
+  apiWithProvider.sync();
+});
+
+window.addEventListener(`offline`, () => {
+  document.title += ` [offline]`;
+});

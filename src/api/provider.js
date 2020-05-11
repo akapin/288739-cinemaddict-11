@@ -4,6 +4,19 @@ const isOnline = () => {
   return window.navigator.onLine;
 };
 
+const getSyncedMovies = (items) => {
+  return items.filter(({success}) => success)
+    .map(({payload}) => payload.movie);
+};
+
+const createStoreStructure = (items) => {
+  return items.reduce((acc, current) => {
+    return Object.assign({}, acc, {
+      [current.id]: current,
+    });
+  }, {});
+};
+
 export default class Provider {
   constructor(api, store) {
     this._api = api;
@@ -14,11 +27,7 @@ export default class Provider {
     if (isOnline()) {
       return this._api.getMovies()
         .then((movies) => {
-          const items = movies.reduce((acc, current) => {
-            return Object.assign({}, acc, {
-              [current.id]: current,
-            });
-          }, {});
+          const items = createStoreStructure(movies.map((movie) => movie.toRAW()));
 
           this._store.setItems(items);
 
@@ -28,7 +37,7 @@ export default class Provider {
 
     const storeMovies = Object.values(this._store.getItems());
 
-    return Promise.resolve(Movie.parseTasks(storeMovies));
+    return Promise.resolve(Movie.parseMovies(storeMovies));
   }
 
   updateMovie(id, movie) {
@@ -70,5 +79,21 @@ export default class Provider {
     }
 
     return Promise.reject(`offline logic is not implemented`);
+  }
+
+  sync() {
+    if (isOnline()) {
+      const storeMovies = Object.values(this._store.getItems());
+
+      return this._api.sync(storeMovies)
+        .then((response) => {
+          const updatedMovies = getSyncedMovies(response.updated);
+          const items = createStoreStructure(updatedMovies);
+
+          this._store.setItems(items);
+        });
+    }
+
+    return Promise.reject(new Error(`Sync data failed`));
   }
 }
