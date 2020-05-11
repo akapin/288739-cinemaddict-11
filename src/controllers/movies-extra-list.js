@@ -25,7 +25,18 @@ export default class MoviesExtraListController {
 
   render() {
     this._moviesExtraListComponent = new MoviesExtraListComponent(this._title);
-    this._renderMovies();
+
+    const movies = this._moviesModel.getMoviesAll();
+
+    if (this._title === `Most commented` && !this._haveMoviesWithComments(movies)) {
+      return;
+    }
+
+    if (this._title === `Top rated` && !this._haveNonZeroRatingMovies(movies)) {
+      return;
+    }
+
+    this._renderMovies(movies);
     render(this._container, this._moviesExtraListComponent);
   }
 
@@ -34,10 +45,9 @@ export default class MoviesExtraListController {
     this._removeMovies();
   }
 
-  _renderMovies() {
-    const movies = this._moviesModel.getMoviesAll();
-    const sortedMovies = movies.slice().sort((a, b) => b[this.sortingProperty] - a[this.sortingProperty]);
+  _renderMovies(movies) {
     const moviesContainerElement = this._moviesExtraListComponent.getElement().querySelector(`.films-list__container`);
+    const sortedMovies = movies.slice().sort((a, b) => b[this.sortingProperty] - a[this.sortingProperty]);
     const showedMovies = sortedMovies.slice(0, this._showingMoviesCount);
 
     const newMovies = showedMovies.map((movie) => {
@@ -58,6 +68,14 @@ export default class MoviesExtraListController {
   _updateMovies() {
     this._removeMovies();
     this._renderMovies();
+  }
+
+  _haveMoviesWithComments(movies) {
+    return movies.filter((movie) => movie.comments.length).length;
+  }
+
+  _haveNonZeroRatingMovies(movies) {
+    return movies.filter((movie) => movie.rating > 0).length;
   }
 
   _onDataChange(movieController, oldData, newData) {
