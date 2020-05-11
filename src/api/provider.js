@@ -25,12 +25,21 @@ export default class Provider {
     return Promise.resolve(Movie.parseTasks(storeMovies));
   }
 
-  updateMovie(id, data) {
+  updateMovie(id, movie) {
     if (isOnline()) {
-      return this._api.updateMovie(id, data);
+      return this._api.updateMovie(id, movie)
+        .then((newMovie) => {
+          this._store.setItem(newMovie.id, newMovie.toRAW());
+
+          return newMovie;
+        });
     }
 
-    return Promise.reject(`offline logic is not implemented`);
+    const localMovie = Movie.clone(Object.assign(movie, {id}));
+
+    this._store.setItem(id, localMovie.toRAW());
+
+    return Promise.resolve(localMovie);
   }
 
   getComments(movieId) {
@@ -41,9 +50,9 @@ export default class Provider {
     return Promise.reject(`offline logic is not implemented`);
   }
 
-  createComment(movieId, data) {
+  createComment(movieId, comment) {
     if (isOnline()) {
-      return this._api.createComment(movieId, data);
+      return this._api.createComment(movieId, comment);
     }
 
     return Promise.reject(`offline logic is not implemented`);

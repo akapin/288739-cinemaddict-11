@@ -28,11 +28,11 @@ const API = class {
       .then(Movie.parseMovies);
   }
 
-  updateMovie(id, data) {
+  updateMovie(id, movie) {
     return this._load({
       url: `movies/${id}`,
       method: Method.PUT,
-      body: JSON.stringify(data.toRAW()),
+      body: JSON.stringify(movie.toRAW()),
       headers: new Headers({"Content-Type": `application/json`}),
     })
       .then((response) => response.json())
@@ -45,11 +45,11 @@ const API = class {
       .then(Comment.parseComments);
   }
 
-  createComment(movieId, data) {
+  createComment(movieId, comment) {
     return this._load({
       url: `comments/${movieId}`,
       method: Method.POST,
-      body: JSON.stringify(data.toRAW()),
+      body: JSON.stringify(comment.toRAW()),
       headers: new Headers({"Content-Type": `application/json`}),
     })
       .then((response) => response.json())
