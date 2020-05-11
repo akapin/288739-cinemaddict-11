@@ -1,8 +1,5 @@
 import Movie from "../models/movie.js";
-
-const isOnline = () => {
-  return window.navigator.onLine;
-};
+import {isOnline} from "../utils/common.js";
 
 const getSyncedMovies = (items) => {
   return items.filter(({success}) => success)

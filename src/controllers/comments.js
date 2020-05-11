@@ -16,6 +16,8 @@ export default class CommentsController {
     this._newCommentController = null;
 
     this._onDataChange = this._onDataChange.bind(this);
+    this._onOnline = this._onOnline.bind(this);
+    this._onOffline = this._onOffline.bind(this);
   }
 
   render() {
@@ -30,6 +32,9 @@ export default class CommentsController {
         const commentsSectionElement = this._commentsSectionComponent.getElement();
         this._newCommentController = new NewCommentController(commentsSectionElement, this._onDataChange);
         this._newCommentController.render();
+
+        window.addEventListener(`online`, this._onOnline);
+        window.addEventListener(`offline`, this._onOffline);
       })
       .catch(() => {
         const errorComponent = new ErrorComponent(`При загрузке комментариев произошла ошибка`);
@@ -46,6 +51,8 @@ export default class CommentsController {
     if (this._newCommentController) {
       this._newCommentController.destroy();
     }
+    window.removeEventListener(`online`, this._onOnline);
+    window.removeEventListener(`offline`, this._onOffline);
   }
 
   _renderComments(comments) {
@@ -77,5 +84,15 @@ export default class CommentsController {
         .catch(() => controller.shake())
         .finally(() => controller.enableDeleteButton());
     }
+  }
+
+  _onOnline() {
+    this._newCommentController.enableForm();
+    this._showedCommentControllers.forEach((commentController) => commentController.enableDeleteButton());
+  }
+
+  _onOffline() {
+    this._newCommentController.disableForm();
+    this._showedCommentControllers.forEach((commentController) => commentController.disableDeleteButton());
   }
 }
