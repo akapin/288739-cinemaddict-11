@@ -1,4 +1,4 @@
-import API from "./api.js";
+import API from "./api/index.js";
 import PageController from "./controllers/page.js";
 
 const AUTHORIZATION = `Basic ar283jdzsdw`;
