@@ -14,7 +14,13 @@ export default class Provider {
     if (isOnline()) {
       return this._api.getMovies()
         .then((movies) => {
-          movies.forEach((movie) => this._store.setItem(movie.id, movie.toRAW()));
+          const items = movies.reduce((acc, current) => {
+            return Object.assign({}, acc, {
+              [current.id]: current,
+            });
+          }, {});
+
+          this._store.setItems(items);
 
           return movies;
         });
