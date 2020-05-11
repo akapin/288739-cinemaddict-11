@@ -71,3 +71,7 @@ export const getUserRank = (watchedMoviesCount) => {
   }
   return ``;
 };
+
+export const isOnline = () => {
+  return window.navigator.onLine;
+};

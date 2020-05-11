@@ -1,5 +1,5 @@
-import Movie from "./models/movie.js";
-import Comment from "./models/comment.js";
+import Movie from "../models/movie.js";
+import Comment from "../models/comment.js";
 
 const Method = {
   GET: `GET`,
@@ -28,11 +28,11 @@ const API = class {
       .then(Movie.parseMovies);
   }
 
-  updateMovie(id, data) {
+  updateMovie(id, movie) {
     return this._load({
       url: `movies/${id}`,
       method: Method.PUT,
-      body: JSON.stringify(data.toRAW()),
+      body: JSON.stringify(movie.toRAW()),
       headers: new Headers({"Content-Type": `application/json`}),
     })
       .then((response) => response.json())
@@ -45,11 +45,11 @@ const API = class {
       .then(Comment.parseComments);
   }
 
-  createComment(movieId, data) {
+  createComment(movieId, comment) {
     return this._load({
       url: `comments/${movieId}`,
       method: Method.POST,
-      body: JSON.stringify(data.toRAW()),
+      body: JSON.stringify(comment.toRAW()),
       headers: new Headers({"Content-Type": `application/json`}),
     })
       .then((response) => response.json())
@@ -61,6 +61,16 @@ const API = class {
       url: `comments/${id}`,
       method: Method.DELETE,
     });
+  }
+
+  sync(data) {
+    return this._load({
+      url: `movies/sync`,
+      method: Method.POST,
+      body: JSON.stringify(data),
+      headers: new Headers({"Content-Type": `application/json`})
+    })
+      .then((response) => response.json());
   }
 
   _load({url, method = Method.GET, body = null, headers = new Headers()}) {
