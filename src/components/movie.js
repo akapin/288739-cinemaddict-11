@@ -1,6 +1,13 @@
 import AbstractComponent from "./abstract-component.js";
 import {formatDateTime, formatDuration, DateTimeFormat} from "../utils/common.js";
 
+const DESCRIPTION_MAX_LENGTH = 140;
+
+const shortenDescription = (description) => {
+  const truncatedDescription = description.substring(0, DESCRIPTION_MAX_LENGTH - 1);
+  return `${truncatedDescription}…`;
+};
+
 const createButtonMarkup = (name, text, isActive = true) => {
   return (
     `<button class="film-card__controls-item button film-card__controls-item--${name} ${isActive ? `film-card__controls-item--active` : ``}">
@@ -20,6 +27,12 @@ const createMovieTemplate = (movie) => {
   const alreadyWatchedtButton = createButtonMarkup(`mark-as-watched`, `Mark as watched`, isWatched);
   const addToFavoritesButton = createButtonMarkup(`favorite`, `Mark as favorite`, isFavorite);
 
+  let shortDescription = description;
+
+  if (description.length > DESCRIPTION_MAX_LENGTH) {
+    shortDescription = shortenDescription(description);
+  }
+
   return (
     `<article class="film-card">
       <h3 class="film-card__title">${title}</h3>
@@ -30,7 +43,7 @@ const createMovieTemplate = (movie) => {
         <span class="film-card__genre">${genres.length ? genres[0] : ``}</span>
       </p>
       <img src="${poster}" alt="" class="film-card__poster">
-      <p class="film-card__description">${description}</p>
+      <p class="film-card__description">${shortDescription}</p>
       <a class="film-card__comments">${commentsCount} comments</a>
       <form class="film-card__controls">
         ${addToWatchlistButton}
