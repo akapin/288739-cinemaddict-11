@@ -3,13 +3,16 @@ import CommentController from "./comment.js";
 import CommentsSectionComponent from "../components/movie-comments-section.js";
 import ErrorComponent from "../components/error.js";
 import {render, remove} from "../utils/render.js";
+import MovieModel from "../models/movie.js";
 
 export default class CommentsController {
-  constructor(container, moviesModel, movie, api) {
+  constructor(container, moviesModel, movie, api, movieController, onMovieDataChange) {
     this._container = container;
     this._moviesModel = moviesModel;
     this._movie = movie;
     this._api = api;
+    this._movieController = movieController;
+    this._onMovieDataChange = onMovieDataChange;
 
     this._showedCommentControllers = [];
     this._commentsSectionComponent = null;
@@ -74,13 +77,23 @@ export default class CommentsController {
       controller.hideError();
       controller.disableForm();
       this._api.createComment(this._movie.id, newData)
-        .then(() => this._updateComments())
+        .then((newMovie) => {
+          this._onMovieDataChange(this._movieController, this._movie, newMovie);
+          this.destroy();
+        })
         .catch(() => controller.showError())
         .finally(() => controller.enableForm());
     } else if (!newData) {
       controller.disableDeleteButton();
       this._api.deleteComment(oldData.id)
-        .then(() => this._updateComments())
+        .then(() => {
+          const newComments = this._movie.comments.filter((it) => it.id !== oldData.id);
+          const newMovie = MovieModel.clone(this._movie);
+          newMovie.comments = newComments;
+
+          this._onMovieDataChange(this._movieController, this._movie, newMovie);
+          this.destroy();
+        })
         .catch(() => controller.shake())
         .finally(() => controller.enableDeleteButton());
     }

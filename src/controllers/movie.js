@@ -126,7 +126,7 @@ export default class MovieController {
 
   _renderMovieCommentsSection() {
     const commentsSectionContainerElement = this._movieDetailsComponent.getElement().querySelector(`.form-details__bottom-container`);
-    this._commentsController = new CommentsController(commentsSectionContainerElement, this._moviesModel, this._movie, this._api);
+    this._commentsController = new CommentsController(commentsSectionContainerElement, this._moviesModel, this._movie, this._api, this, this._onDataChange);
     this._commentsController.render();
   }
 

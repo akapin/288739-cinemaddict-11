@@ -46,7 +46,8 @@ const renderChart = (statisticCtx, movies) => {
         data: genreStats.map((genre) => genre.count),
         backgroundColor: `#ffe800`,
         hoverBackgroundColor: `#ffe800`,
-        anchor: `start`
+        anchor: `start`,
+        barThickness: 24
       }]
     },
     options: {
@@ -72,7 +73,6 @@ const renderChart = (statisticCtx, movies) => {
             display: false,
             drawBorder: false
           },
-          barThickness: 24
         }],
         xAxes: [{
           ticks: {

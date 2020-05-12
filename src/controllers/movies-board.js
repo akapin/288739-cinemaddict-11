@@ -1,5 +1,6 @@
 import MoviesMainListController from "./movies-main-list.js";
-import MoviesExtraListController from "./movies-extra-list.js";
+import MostCommentedMovieListController from "./most-commented-movie-list.js";
+import TopRatedMovieListController from "./top-rated-movie-list.js";
 import MoviesBoardComponent from "../components/movies-board.js";
 import NoMoviesComponent from "../components/no-movies.js";
 import {render} from "../utils/render.js";
@@ -29,11 +30,11 @@ export default class MoviesBoardController {
     const moviesMainListController = new MoviesMainListController(moviesBoardElement, this._moviesModel, this._api);
     moviesMainListController.render();
 
-    const topRatedMoviesController = new MoviesExtraListController(moviesBoardElement, this._moviesModel, this._api, `rating`, `Top rated`);
-    topRatedMoviesController.render();
+    const topRatedMovieListController = new TopRatedMovieListController(moviesBoardElement, this._moviesModel, this._api);
+    topRatedMovieListController.render();
 
-    const mostCommentedMoviesController = new MoviesExtraListController(moviesBoardElement, this._moviesModel, this._api, `comments.length`, `Most commented`);
-    mostCommentedMoviesController.render();
+    const mostCommentedMovieListController = new MostCommentedMovieListController(moviesBoardElement, this._moviesModel, this._api);
+    mostCommentedMovieListController.render();
 
     render(this._container, this._moviesBoardComponent);
   }
