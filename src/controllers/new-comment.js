@@ -46,27 +46,14 @@ export default class NewCommentController {
     document.removeEventListener(`keydown`, this._onCtrlEnterKeyDown);
   }
 
-  shake() {
-    this._newCommentFormComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
-
-    setTimeout(() => {
-      this._newCommentFormComponent.getElement().style.animation = ``;
-    }, SHAKE_ANIMATION_TIMEOUT);
-  }
-
-  showErrorOutline() {
-    const formElement = this._newCommentFormComponent.getElement();
-    formElement.querySelector(`.film-details__comment-input`).style.border = `solid red 2px`;
-  }
-
   disableForm() {
     const formElement = this._newCommentFormComponent.getElement();
     formElement.querySelector(`.film-details__comment-input`).disabled = true;
 
     const emotionInputs = formElement.querySelectorAll(`.film-details__emoji-item`);
 
-    for (let i = 0; i < emotionInputs.length; i++) {
-      emotionInputs[i].disabled = true;
+    for (const emotionInput of emotionInputs) {
+      emotionInput.disabled = true;
     }
   }
 
@@ -76,19 +63,32 @@ export default class NewCommentController {
 
     const emotionInputs = formElement.querySelectorAll(`.film-details__emoji-item`);
 
-    for (let i = 0; i < emotionInputs.length; i++) {
-      emotionInputs[i].disabled = false;
+    for (const emotionInput of emotionInputs) {
+      emotionInput.disabled = false;
     }
   }
 
   showError() {
-    this.showErrorOutline();
-    this.shake();
+    this._showErrorOutline();
+    this._shake();
   }
 
   hideError() {
     const formElement = this._newCommentFormComponent.getElement();
     formElement.querySelector(`.film-details__comment-input`).style.border = `none`;
+  }
+
+  _shake() {
+    this._newCommentFormComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+
+    setTimeout(() => {
+      this._newCommentFormComponent.getElement().style.animation = ``;
+    }, SHAKE_ANIMATION_TIMEOUT);
+  }
+
+  _showErrorOutline() {
+    const formElement = this._newCommentFormComponent.getElement();
+    formElement.querySelector(`.film-details__comment-input`).style.border = `solid red 2px`;
   }
 
   _updateForm() {

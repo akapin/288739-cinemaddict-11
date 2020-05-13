@@ -15,8 +15,8 @@ const getMoviesByWatchingDate = (movies, dateFrom) => {
 };
 
 const calcGenreStats = (movies) => {
-  const genreStats = movies.reduce((acc, obj) => {
-    const genres = obj.genres;
+  const genreStats = movies.reduce((acc, movie) => {
+    const genres = movie.genres;
     for (const genre of genres) {
       const exist = acc.find(({name}) => genre === name);
       if (exist) {
