@@ -189,6 +189,20 @@ export default class Statistics extends AbstractSmartComponent {
     this._renderChart(this._filteredMovies);
   }
 
+  _renderChart(movies) {
+    const element = this.getElement();
+    const statisticCtx = element.querySelector(`.statistic__chart`);
+    this._resetChart();
+    this._chart = renderChart(statisticCtx, movies);
+  }
+
+  _resetChart() {
+    if (this._chart) {
+      this._chart.destroy();
+      this._chart = null;
+    }
+  }
+
   setDatePeriodChangeHandler(handler) {
     this.getElement().querySelector(`.statistic__filters`).addEventListener(`change`, (evt) => {
       handler(evt.target.value);
@@ -221,19 +235,5 @@ export default class Statistics extends AbstractSmartComponent {
 
     this._filteredMovies = getMoviesByWatchingDate(this._allMovies, dateFrom);
     this.rerender();
-  }
-
-  _renderChart(movies) {
-    const element = this.getElement();
-    const statisticCtx = element.querySelector(`.statistic__chart`);
-    this._resetChart();
-    this._chart = renderChart(statisticCtx, movies);
-  }
-
-  _resetChart() {
-    if (this._chart) {
-      this._chart.destroy();
-      this._chart = null;
-    }
   }
 }

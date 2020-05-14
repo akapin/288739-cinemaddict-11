@@ -7,6 +7,10 @@ export default class Filters extends AbstractComponent {
     return createFiltersTemplate();
   }
 
+  _getFilterNameByLink(link) {
+    return link.split(`#`)[1];
+  }
+
   setFilterChangeHandler(handler) {
     this.getElement().addEventListener(`click`, (evt) => {
       evt.preventDefault();
@@ -19,9 +23,5 @@ export default class Filters extends AbstractComponent {
 
       handler(this._getFilterNameByLink(link));
     });
-  }
-
-  _getFilterNameByLink(link) {
-    return link.split(`#`)[1];
   }
 }
