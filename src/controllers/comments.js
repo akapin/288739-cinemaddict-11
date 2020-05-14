@@ -103,7 +103,7 @@ export default class Comments {
           this._onMovieDataChange(this._movieController, this._movie, newMovie);
           this.destroy();
         })
-        .catch(() => controller.shake())
+        .catch(() => controller.showError())
         .finally(() => controller.enableDeleteButton());
     }
   }

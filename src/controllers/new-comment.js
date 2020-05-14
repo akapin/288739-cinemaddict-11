@@ -4,8 +4,6 @@ import {render, remove} from "../utils/render.js";
 import {Key} from "../const.js";
 import {encode} from "he";
 
-const SHAKE_ANIMATION_TIMEOUT = 600;
-
 const EmptyComment = {
   "id": ``,
   "author": ``,
@@ -47,48 +45,19 @@ export default class NewComment {
   }
 
   disableForm() {
-    const formElement = this._newCommentFormComponent.getElement();
-    formElement.querySelector(`.film-details__comment-input`).disabled = true;
-
-    const emotionInputs = formElement.querySelectorAll(`.film-details__emoji-item`);
-
-    for (const emotionInput of emotionInputs) {
-      emotionInput.disabled = true;
-    }
+    this._newCommentFormComponent.disable();
   }
 
   enableForm() {
-    const formElement = this._newCommentFormComponent.getElement();
-    formElement.querySelector(`.film-details__comment-input`).disabled = false;
-
-    const emotionInputs = formElement.querySelectorAll(`.film-details__emoji-item`);
-
-    for (const emotionInput of emotionInputs) {
-      emotionInput.disabled = false;
-    }
+    this._newCommentFormComponent.enable();
   }
 
   showError() {
-    this._showErrorOutline();
-    this._shake();
+    this._newCommentFormComponent.showError();
   }
 
   hideError() {
-    const formElement = this._newCommentFormComponent.getElement();
-    formElement.querySelector(`.film-details__comment-input`).style.border = `none`;
-  }
-
-  _shake() {
-    this._newCommentFormComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
-
-    setTimeout(() => {
-      this._newCommentFormComponent.getElement().style.animation = ``;
-    }, SHAKE_ANIMATION_TIMEOUT);
-  }
-
-  _showErrorOutline() {
-    const formElement = this._newCommentFormComponent.getElement();
-    formElement.querySelector(`.film-details__comment-input`).style.border = `solid red 2px`;
+    this._newCommentFormComponent.hideError();
   }
 
   _updateForm() {

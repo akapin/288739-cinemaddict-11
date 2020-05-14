@@ -2,6 +2,7 @@ import AbstractSmartComponent from "./abstract-smart-component.js";
 import {timeFromNow} from "../utils/common.js";
 
 const DEFAULT_DELETE_BUTTON_TEXT = `Delete`;
+const SHAKE_ANIMATION_TIMEOUT = 600;
 
 const createCommentTemplate = (commentObj, deleteButtonText) => {
   const {emotion, comment, author, date} = commentObj;
@@ -47,6 +48,23 @@ export default class Comment extends AbstractSmartComponent {
   setDeleteButtonText(text) {
     this._deleteButtonText = text;
     this.rerender();
+  }
+
+  disableDeleteButton() {
+    this.getElement().querySelector(`.film-details__comment-delete`).disabled = true;
+  }
+
+  enableDeleteButton() {
+    this.getElement().querySelector(`.film-details__comment-delete`).disabled = false;
+  }
+
+  shake() {
+    this.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+
+    setTimeout(() => {
+      this.getElement().style.animation = ``;
+      this.setDeleteButtonText(`Delete`);
+    }, SHAKE_ANIMATION_TIMEOUT);
   }
 
   setDeleteButtonClickHandler(handler) {

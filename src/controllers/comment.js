@@ -1,8 +1,6 @@
 import CommentComponent from "../components/comment.js";
 import {render, remove} from "../utils/render.js";
 
-const SHAKE_ANIMATION_TIMEOUT = 600;
-
 export default class Comment {
   constructor(container, onDataChange) {
     this._container = container;
@@ -26,21 +24,14 @@ export default class Comment {
   }
 
   disableDeleteButton() {
-    const commentElement = this._commentComponent.getElement();
-    commentElement.querySelector(`.film-details__comment-delete`).disabled = true;
+    this._commentComponent.disableDeleteButton();
   }
 
   enableDeleteButton() {
-    const commentElement = this._commentComponent.getElement();
-    commentElement.querySelector(`.film-details__comment-delete`).disabled = false;
+    this._commentComponent.enableDeleteButton();
   }
 
-  shake() {
-    this._commentComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
-
-    setTimeout(() => {
-      this._commentComponent.getElement().style.animation = ``;
-      this._commentComponent.setDeleteButtonText(`Delete`);
-    }, SHAKE_ANIMATION_TIMEOUT);
+  showError() {
+    this._commentComponent.shake();
   }
 }
