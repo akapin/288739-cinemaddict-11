@@ -61,6 +61,7 @@ export default class Movie {
       evt.preventDefault();
       const newMovie = MovieModel.clone(movie);
       newMovie.isWatched = !newMovie.isWatched;
+      newMovie.watchingDate = newMovie.isWatched ? new Date() : null;
       this._onDataChange(this, movie, newMovie);
     });
 
@@ -159,6 +160,7 @@ export default class Movie {
   _onAlreadyWatchedButtonClick() {
     const newMovie = MovieModel.clone(this._movie);
     newMovie.isWatched = !newMovie.isWatched;
+    newMovie.watchingDate = newMovie.isWatched ? new Date() : null;
     this._onDataChange(this, this._movie, newMovie);
   }
 

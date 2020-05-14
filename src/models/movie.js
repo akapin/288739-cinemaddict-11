@@ -18,7 +18,7 @@ export default class Movie {
     this.isInWatchlist = Boolean(data[`user_details`][`watchlist`]);
     this.isWatched = Boolean(data[`user_details`][`already_watched`]);
     this.isFavorite = Boolean(data[`user_details`][`favorite`]);
-    this.watchingDate = new Date(data[`user_details`][`watching_date`]);
+    this.watchingDate = data[`user_details`][`watching_date`] ? new Date(data[`user_details`][`watching_date`]) : null;
   }
 
   toRAW() {
@@ -45,7 +45,7 @@ export default class Movie {
       "user_details": {
         "watchlist": this.isInWatchlist,
         "already_watched": this.isWatched,
-        "watching_date": this.watchingDate.toISOString(),
+        "watching_date": this.watchingDate ? this.watchingDate.toISOString() : null,
         "favorite": this.isFavorite
       }
     };
