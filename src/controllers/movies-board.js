@@ -5,7 +5,7 @@ import MoviesBoardComponent from "../components/movies-board.js";
 import NoMoviesComponent from "../components/no-movies.js";
 import {render} from "../utils/render.js";
 
-export default class MoviesBoardController {
+export default class MoviesBoard {
   constructor(container, moviesModel, api) {
     this._container = container;
     this._moviesModel = moviesModel;

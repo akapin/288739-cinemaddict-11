@@ -1,9 +1,9 @@
-import CommentComponent from "../components/movie-comment.js";
+import CommentComponent from "../components/comment.js";
 import {render, remove} from "../utils/render.js";
 
 const SHAKE_ANIMATION_TIMEOUT = 600;
 
-export default class CommentController {
+export default class Comment {
   constructor(container, onDataChange) {
     this._container = container;
     this._onDataChange = onDataChange;

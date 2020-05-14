@@ -2,7 +2,7 @@ import StatisticsComponent from "../components/statistics.js";
 import {getWatchedMovies} from "../utils/filter.js";
 import {render, remove} from "../utils/render.js";
 
-export default class StatisticsController {
+export default class Statistics {
   constructor(container, moviesModel, api) {
     this._container = container;
     this._moviesModel = moviesModel;

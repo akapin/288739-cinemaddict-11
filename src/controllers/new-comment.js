@@ -14,7 +14,7 @@ const EmptyComment = {
   "emotion": ``,
 };
 
-export default class NewCommentController {
+export default class NewComment {
   constructor(container, onDataChange) {
     this._container = container;
     this._onDataChange = onDataChange;

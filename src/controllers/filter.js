@@ -1,7 +1,7 @@
 import FilterComponent from "../components/filter.js";
 import {render, remove} from "../utils/render.js";
 
-export default class FilterController {
+export default class Filter {
   constructor(container) {
     this._container = container;
     this._filterComponent = null;

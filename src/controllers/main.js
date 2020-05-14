@@ -6,7 +6,7 @@ import MainComponent from "../components/main.js";
 import LoadingComponent from "../components/loading.js";
 import {render, remove} from "../utils/render.js";
 
-export default class MainController {
+export default class Main {
   constructor(container, api, moviesModel) {
     this._container = container;
     this._api = api;

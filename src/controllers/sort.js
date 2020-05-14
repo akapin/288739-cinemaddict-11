@@ -2,7 +2,7 @@ import SortingComponent from "../components/sorting.js";
 import {SortType} from "../const.js";
 import {render, replace} from "../utils/render.js";
 
-export default class SortController {
+export default class Sort {
   constructor(container, moviesModel) {
     this._container = container;
     this._moviesModel = moviesModel;

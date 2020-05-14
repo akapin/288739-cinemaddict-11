@@ -1,11 +1,11 @@
 import NewCommentController from "./new-comment.js";
 import CommentController from "./comment.js";
-import CommentsSectionComponent from "../components/movie-comments-section.js";
+import CommentsSectionComponent from "../components/comments-section.js";
 import ErrorComponent from "../components/error.js";
 import {render, remove} from "../utils/render.js";
 import MovieModel from "../models/movie.js";
 
-export default class CommentsController {
+export default class Comments {
   constructor(container, moviesModel, movie, api, movieController, onMovieDataChange) {
     this._container = container;
     this._moviesModel = moviesModel;

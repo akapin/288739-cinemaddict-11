@@ -2,7 +2,7 @@ import MoviesExtraListController from "./movies-extra-list.js";
 
 const SHOWING_MOVIES_COUNT_ON_START = 2;
 
-export default class TopRatedMovieListController extends MoviesExtraListController {
+export default class TopRatedMovieList extends MoviesExtraListController {
   constructor(container, moviesModel, api) {
     super(container, moviesModel, api);
 

@@ -3,7 +3,7 @@ import MainController from "./main.js";
 import FooterController from "./footer.js";
 import MoviesModel from "../models/movies.js";
 
-export default class PageController {
+export default class Page {
   constructor(container, api) {
     this._container = container;
     this._api = api;

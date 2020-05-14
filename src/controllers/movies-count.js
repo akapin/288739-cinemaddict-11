@@ -1,7 +1,7 @@
 import MoviesCountComponent from "../components/movies-count.js";
 import {render, remove} from "../utils/render.js";
 
-export default class MoviesCountController {
+export default class MoviesCount {
   constructor(container, moviesModel) {
     this._container = container;
     this._moviesModel = moviesModel;

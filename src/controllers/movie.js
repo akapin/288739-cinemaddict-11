@@ -10,7 +10,7 @@ export const Mode = {
   POPUP: `popup`,
 };
 
-export default class MovieController {
+export default class Movie {
   constructor(container, moviesModel, onDataChange, onViewChange, api) {
     this._container = container;
     this._moviesModel = moviesModel;

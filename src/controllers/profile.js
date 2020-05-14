@@ -2,7 +2,7 @@ import ProfileComponent from "../components/profile.js";
 import {getWatchedMovies} from "../utils/filter.js";
 import {render, remove} from "../utils/render.js";
 
-export default class ProfileController {
+export default class Profile {
   constructor(container, moviesModel) {
     this._container = container;
     this._moviesModel = moviesModel;

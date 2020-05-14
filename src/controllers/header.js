@@ -2,7 +2,7 @@ import ProfileController from "./profile.js";
 import HeaderComponent from "../components/header.js";
 import {render} from "../utils/render.js";
 
-export default class HeaderController {
+export default class Header {
   constructor(container, moviesModel) {
     this._container = container;
     this._moviesModel = moviesModel;

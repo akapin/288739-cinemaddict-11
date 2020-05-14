@@ -2,7 +2,7 @@ import MoviesCountController from "./movies-count.js";
 import FooterComponent from "../components/footer.js";
 import {render} from "../utils/render.js";
 
-export default class FooterController {
+export default class Footer {
   constructor(container, moviesModel) {
     this._container = container;
     this._moviesModel = moviesModel;

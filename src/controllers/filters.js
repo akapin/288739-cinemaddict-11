@@ -4,7 +4,7 @@ import {render, remove, RenderPosition} from "../utils/render.js";
 import {FilterType} from "../const.js";
 import {getMoviesByFilter} from "../utils/filter.js";
 
-export default class FiltersController {
+export default class Filters {
   constructor(container, moviesModel, contentControllers) {
     this._container = container;
     this._moviesModel = moviesModel;

@@ -6,7 +6,7 @@ import {render, remove} from "../utils/render.js";
 const SHOWING_MOVIES_COUNT_ON_START = 5;
 const SHOWING_MOVIES_COUNT_BY_BUTTON = 5;
 
-export default class MoviesMainListController {
+export default class MoviesMainList {
   constructor(container, moviesModel, api) {
     this._container = container;
     this._moviesModel = moviesModel;

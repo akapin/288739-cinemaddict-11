@@ -2,7 +2,7 @@ import MovieController from "./movie.js";
 import MoviesExtraListComponent from "../components/movies-extra-list.js";
 import {render, remove} from "../utils/render.js";
 
-export default class MoviesExtraListController {
+export default class MoviesExtraList {
   constructor(container, moviesModel, api) {
     this._container = container;
     this._moviesModel = moviesModel;
