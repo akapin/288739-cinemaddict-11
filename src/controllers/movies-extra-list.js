@@ -48,6 +48,7 @@ export default class MoviesExtraListController {
         const isSuccess = this._moviesModel.updateMovie(oldData.id, movieModel);
 
         if (isSuccess) {
+          movieController.destroy();
           movieController.render(movieModel, movieController.getMode());
         }
       });

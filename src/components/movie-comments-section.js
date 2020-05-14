@@ -10,7 +10,7 @@ const createCommentsSectionTemplate = (commentsCount) => {
 };
 
 export default class CommentsSection extends AbstractComponent {
-  constructor(commentsCount) {
+  constructor(commentsCount = 0) {
     super();
     this._commentsCount = commentsCount;
   }

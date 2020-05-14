@@ -25,6 +25,10 @@ export default class MovieController {
     this._commentsController = null;
 
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
+    this._onCloseButtonClick = this._onCloseButtonClick.bind(this);
+    this._onAddToWatchlistButtonClick = this._onAddToWatchlistButtonClick.bind(this);
+    this._onAlreadyWatchedButtonClick = this._onAlreadyWatchedButtonClick.bind(this);
+    this._onAddToFavoritesButtonClick = this._onAddToFavoritesButtonClick.bind(this);
   }
 
   render(movie, mode = Mode.DEFAULT) {
@@ -67,27 +71,7 @@ export default class MovieController {
       this._onDataChange(this, movie, newMovie);
     });
 
-    this._movieDetailsComponent.setMovieDetailsCloseButtonClickHandler(() => {
-      this._closeMovieDetailsPopup();
-    });
-
-    this._movieDetailsComponent.setAddToWatchlistButtonClickHandler(() => {
-      const newMovie = MovieModel.clone(movie);
-      newMovie.isInWatchlist = !newMovie.isInWatchlist;
-      this._onDataChange(this, movie, newMovie);
-    });
-
-    this._movieDetailsComponent.setAlreadyWatchedButtonClickHandler(() => {
-      const newMovie = MovieModel.clone(movie);
-      newMovie.isWatched = !newMovie.isWatched;
-      this._onDataChange(this, movie, newMovie);
-    });
-
-    this._movieDetailsComponent.setAddToFavoritesButtonClickHandler(() => {
-      const newMovie = MovieModel.clone(movie);
-      newMovie.isFavorite = !newMovie.isFavorite;
-      this._onDataChange(this, movie, newMovie);
-    });
+    this._setMovieDetailsEventListeners();
 
     switch (mode) {
       case Mode.DEFAULT:
@@ -119,8 +103,15 @@ export default class MovieController {
   }
 
   destroy() {
-    remove(this._movieDetailsComponent);
     remove(this._movieComponent);
+    this._destroyMovieDetails();
+  }
+
+  _destroyMovieDetails() {
+    remove(this._movieDetailsComponent);
+    if (this._commentsController) {
+      this._commentsController.destroy();
+    }
     document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
 
@@ -137,19 +128,44 @@ export default class MovieController {
     bodyElement.append(this._movieDetailsComponent.getElement());
     this._renderMovieCommentsSection();
     document.addEventListener(`keydown`, this._onEscKeyDown);
-    this._movieDetailsComponent.setMovieDetailsCloseButtonClickHandler(() => {
-      this._closeMovieDetailsPopup();
-    });
+    this._setMovieDetailsEventListeners();
     this._mode = Mode.POPUP;
   }
 
   _closeMovieDetailsPopup() {
     const bodyElement = document.querySelector(`body`);
     bodyElement.classList.remove(`hide-overflow`);
-    remove(this._movieDetailsComponent);
-    this._commentsController.destroy();
-    document.removeEventListener(`keydown`, this._onEscKeyDown);
+    this._destroyMovieDetails();
     this._mode = Mode.DEFAULT;
+  }
+
+  _setMovieDetailsEventListeners() {
+    this._movieDetailsComponent.setMovieDetailsCloseButtonClickHandler(this._onCloseButtonClick);
+    this._movieDetailsComponent.setAddToWatchlistButtonClickHandler(this._onAddToWatchlistButtonClick);
+    this._movieDetailsComponent.setAlreadyWatchedButtonClickHandler(this._onAlreadyWatchedButtonClick);
+    this._movieDetailsComponent.setAddToFavoritesButtonClickHandler(this._onAddToFavoritesButtonClick);
+  }
+
+  _onCloseButtonClick() {
+    this._closeMovieDetailsPopup();
+  }
+
+  _onAddToWatchlistButtonClick() {
+    const newMovie = MovieModel.clone(this._movie);
+    newMovie.isInWatchlist = !newMovie.isInWatchlist;
+    this._onDataChange(this, this._movie, newMovie);
+  }
+
+  _onAlreadyWatchedButtonClick() {
+    const newMovie = MovieModel.clone(this._movie);
+    newMovie.isWatched = !newMovie.isWatched;
+    this._onDataChange(this, this._movie, newMovie);
+  }
+
+  _onAddToFavoritesButtonClick() {
+    const newMovie = MovieModel.clone(this._movie);
+    newMovie.isFavorite = !newMovie.isFavorite;
+    this._onDataChange(this, this._movie, newMovie);
   }
 
   _onEscKeyDown(evt) {

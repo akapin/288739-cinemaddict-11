@@ -24,8 +24,14 @@ export default class CommentsController {
   }
 
   render() {
+    this._commentsSectionComponent = new CommentsSectionComponent();
+
     this._api.getComments(this._movie.id)
       .then((comments) => {
+        if (!this._commentsSectionComponent) {
+          return;
+        }
+
         this._commentsSectionComponent = new CommentsSectionComponent(comments.length);
         render(this._container, this._commentsSectionComponent);
 
@@ -48,9 +54,12 @@ export default class CommentsController {
   destroy() {
     this._showedCommentControllers.forEach((commentController) => commentController.destroy());
     this._showedCommentControllers = [];
+
     if (this._commentsSectionComponent) {
       remove(this._commentsSectionComponent);
     }
+    this._commentsSectionComponent = null;
+
     if (this._newCommentController) {
       this._newCommentController.destroy();
     }
